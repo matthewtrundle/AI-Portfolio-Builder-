@@ -40,16 +40,26 @@ export function verifyPin(pin: string, hash: string): boolean {
 export async function createPortfolio(
   data: any,
   pin: string,
-  generatedCode?: string
+  generatedCode?: string,
+  userId?: string
 ): Promise<{ slug: string; pin: string }> {
   const slug = generateSlug(data.name);
   const pinHash = hashPin(pin);
   
   try {
-    await sql`
-      INSERT INTO portfolios (slug, name, email, pin_hash, portfolio_data, generated_code)
-      VALUES (${slug}, ${data.name}, ${data.email}, ${pinHash}, ${JSON.stringify(data)}, ${generatedCode})
-    `;
+    if (userId) {
+      // Create portfolio linked to user
+      await sql`
+        INSERT INTO portfolios (slug, name, email, pin_hash, portfolio_data, generated_code, user_id)
+        VALUES (${slug}, ${data.name}, ${data.email}, ${pinHash}, ${JSON.stringify(data)}, ${generatedCode}, ${userId})
+      `;
+    } else {
+      // Create anonymous portfolio (backward compatibility)
+      await sql`
+        INSERT INTO portfolios (slug, name, email, pin_hash, portfolio_data, generated_code)
+        VALUES (${slug}, ${data.name}, ${data.email}, ${pinHash}, ${JSON.stringify(data)}, ${generatedCode})
+      `;
+    }
     
     return { slug, pin };
   } catch (error) {

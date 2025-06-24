@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
 import { createPortfolio } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { sql } from "@vercel/postgres";
 
 // Simple in-memory rate limiting (in production, use Redis or similar)
 const requestCounts = new Map<string, { count: number; resetTime: number }>();
@@ -26,6 +29,9 @@ function checkRateLimit(ip: string): boolean {
 
 export async function POST(request: NextRequest) {
   try {
+    // Check authentication
+    const session = await getServerSession(authOptions);
+    
     // Rate limiting
     const ip = request.headers.get("x-forwarded-for") || "unknown";
     if (!checkRateLimit(ip)) {
@@ -171,12 +177,24 @@ Return a JSON object with sections: hero, about, experience, projects, skills, a
     // Generate a 6-digit PIN
     const pin = Math.floor(100000 + Math.random() * 900000).toString();
 
+    // Get user ID if authenticated
+    let userId: string | undefined;
+    if (session?.user?.email) {
+      const { rows } = await sql`
+        SELECT id FROM users WHERE email = ${session.user.email}
+      `;
+      if (rows.length > 0) {
+        userId = rows[0].id;
+      }
+    }
+
     // Save to database
     try {
       const { slug } = await createPortfolio(
         { ...data, generatedContent: portfolioContent },
         pin,
-        portfolioCode
+        portfolioCode,
+        userId
       );
 
       return NextResponse.json({
