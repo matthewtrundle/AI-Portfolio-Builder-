@@ -204,15 +204,7 @@ export default function PreviewPortfolio({
               {/* Mock Portfolio Preview */}
               <div className="border rounded-lg overflow-hidden">
                 <iframe
-                  src="data:text/html;charset=utf-8,<html><body style='font-family: system-ui; padding: 40px; background: #f8fafc;'><h1 style='color: #1e293b; margin-bottom: 10px;'>" +
-                    encodeURIComponent(data.name) +
-                    "</h1><p style='color: #64748b; font-size: 20px; margin-bottom: 30px;'>" +
-                    encodeURIComponent(data.title) +
-                    "</p><div style='background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);'><h2 style='color: #1e293b; margin-bottom: 20px;'>About</h2><p style='color: #475569; line-height: 1.6;'>" +
-                    encodeURIComponent(data.currentRole) +
-                    "</p><p style='color: #475569; line-height: 1.6; margin-top: 10px;'><strong>Key Achievement:</strong> " +
-                    encodeURIComponent(data.keyAchievement) +
-                    "</p></div></body></html>"
+                  src={`data:text/html;charset=utf-8,<html><body style='font-family: system-ui; padding: 40px; background: #f8fafc;'><h1 style='color: #1e293b; margin-bottom: 10px;'>${encodeURIComponent(data.name)}</h1><p style='color: #64748b; font-size: 20px; margin-bottom: 30px;'>${encodeURIComponent(data.title)}</p><div style='background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);'><h2 style='color: #1e293b; margin-bottom: 20px;'>About</h2><p style='color: #475569; line-height: 1.6;'>${encodeURIComponent(data.currentRole)}</p><p style='color: #475569; line-height: 1.6; margin-top: 10px;'><strong>Key Achievement:</strong> ${encodeURIComponent(data.keyAchievement)}</p></div></body></html>`}
                   className="w-full h-[600px] bg-white"
                   title="Portfolio Preview"
                 />
