@@ -485,7 +485,7 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
                       <button
                         type="button"
                         onClick={() => {
-                          const current = getValues("projects");
+                          const current = getValues("projects") || [];
                           setValue("projects", current.filter((_, i) => i !== index));
                         }}
                         className="text-red-500 hover:text-red-700"
