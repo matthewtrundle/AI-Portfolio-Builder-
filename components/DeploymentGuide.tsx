@@ -21,6 +21,17 @@ interface DeploymentGuideProps {
   onBack: () => void;
 }
 
+interface DeploymentStep {
+  id: string;
+  title: string;
+  description: string;
+  commands?: string[];
+  link?: string;
+  action?: string;
+  vars?: string[];
+  note?: string;
+}
+
 export default function DeploymentGuide({
   portfolioData,
   generatedCode,
@@ -37,7 +48,7 @@ export default function DeploymentGuide({
     }, 2000);
   };
 
-  const deploymentSteps = {
+  const deploymentSteps: Record<string, DeploymentStep[]> = {
     vercel: [
       {
         id: "github",
