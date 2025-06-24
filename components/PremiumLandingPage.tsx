@@ -142,9 +142,6 @@ export default function PremiumLandingPage() {
               <Link href="#testimonials" className="text-gray-600 hover:text-gray-900 transition-colors">
                 Success Stories
               </Link>
-              <Link href="#pricing" className="text-gray-600 hover:text-gray-900 transition-colors">
-                Pricing
-              </Link>
               <Link
                 href="/auth/signin"
                 className="text-gray-900 font-medium hover:text-gray-700 transition-colors"
@@ -216,7 +213,6 @@ export default function PremiumLandingPage() {
             >
               Your resume gets trapped in ATS filters. Your AI portfolio goes{" "}
               <span className="font-semibold text-gray-900">straight to hiring managers</span>.
-              Join {portfolioCount.toLocaleString()} professionals getting hired faster.
             </motion.p>
 
             {/* CTA buttons with hover effects */}
@@ -466,32 +462,6 @@ export default function PremiumLandingPage() {
             viewport={{ once: true }}
             className="max-w-6xl mx-auto"
           >
-            {/* Stats Grid */}
-            <div className="grid grid-cols-2 md:grid-cols-4 gap-8 mb-20">
-              {[
-                { number: portfolioCount.toLocaleString(), label: "Active Portfolios", icon: Briefcase },
-                { number: `${interviewRate}%`, label: "Get Interviews", icon: Target },
-                { number: offerCount.toLocaleString(), label: "Job Offers", icon: Award },
-                { number: "4.9★", label: "User Rating", icon: Star },
-              ].map((stat, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, scale: 0.9 }}
-                  whileInView={{ opacity: 1, scale: 1 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.1 }}
-                  className="text-center group"
-                >
-                  <div className="inline-flex items-center justify-center w-16 h-16 bg-gradient-to-br from-blue-100 to-purple-100 rounded-2xl mb-4 group-hover:scale-110 transition-transform">
-                    <stat.icon className="w-8 h-8 text-blue-600" />
-                  </div>
-                  <div className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2">
-                    {stat.number}
-                  </div>
-                  <div className="text-gray-600">{stat.label}</div>
-                </motion.div>
-              ))}
-            </div>
 
             {/* Testimonials Carousel */}
             <div className="relative">
@@ -541,198 +511,6 @@ export default function PremiumLandingPage() {
         </div>
       </section>
 
-      {/* Premium Pricing Section */}
-      <section id="pricing" className="py-24 bg-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-5xl mx-auto"
-          >
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  Simple, Transparent Pricing
-                </span>
-              </h2>
-              <p className="text-xl text-gray-600 mb-8">
-                Start free. Upgrade when you see results.
-              </p>
-
-              {/* Billing toggle */}
-              <div className="inline-flex items-center gap-4 bg-gray-100 rounded-full p-1">
-                <button
-                  onClick={() => setBillingCycle("monthly")}
-                  className={`px-6 py-2 rounded-full font-medium transition-all ${
-                    billingCycle === "monthly"
-                      ? "bg-white shadow-sm text-gray-900"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Monthly
-                </button>
-                <button
-                  onClick={() => setBillingCycle("annual")}
-                  className={`px-6 py-2 rounded-full font-medium transition-all ${
-                    billingCycle === "annual"
-                      ? "bg-white shadow-sm text-gray-900"
-                      : "text-gray-600"
-                  }`}
-                >
-                  Annual
-                  <span className="ml-2 text-green-600 text-sm">Save 20%</span>
-                </button>
-              </div>
-            </div>
-
-            <div className="grid md:grid-cols-3 gap-8">
-              {/* Free Plan */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                className="relative"
-              >
-                <div className="h-full bg-white border-2 border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition-all duration-300">
-                  <h3 className="text-2xl font-bold mb-2">Free</h3>
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold">$0</span>
-                    <span className="text-gray-600">/forever</span>
-                  </div>
-                  <p className="text-gray-600 mb-8">Perfect for getting started</p>
-                  
-                  <ul className="space-y-4 mb-8">
-                    {["1 Portfolio", "Basic Analytics", "Public URL", "Email Support"].map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Link
-                    href="/app"
-                    className="block w-full py-3 bg-gray-100 hover:bg-gray-200 text-center rounded-xl font-semibold transition-colors"
-                  >
-                    Get Started
-                  </Link>
-                </div>
-              </motion.div>
-
-              {/* Pro Plan */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.1 }}
-                className="relative"
-              >
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 bg-gradient-to-r from-blue-600 to-purple-600 text-white px-4 py-1 rounded-full text-sm font-medium">
-                  Most Popular
-                </div>
-                <div className="h-full bg-gradient-to-br from-blue-50 to-purple-50 border-2 border-blue-500 rounded-2xl p-8 shadow-xl">
-                  <h3 className="text-2xl font-bold mb-2">Pro</h3>
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold">
-                      ${billingCycle === "monthly" ? "19" : "15"}
-                    </span>
-                    <span className="text-gray-600">/month</span>
-                    {billingCycle === "annual" && (
-                      <p className="text-sm text-green-600 mt-1">Billed annually</p>
-                    )}
-                  </div>
-                  <p className="text-gray-600 mb-8">Everything you need to get hired</p>
-                  
-                  <ul className="space-y-4 mb-8">
-                    {[
-                      "Unlimited Portfolios",
-                      "Advanced Analytics",
-                      "Custom Domain",
-                      "Priority Support",
-                      "AI Content Updates",
-                      "Remove Branding",
-                    ].map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-blue-600 flex-shrink-0" />
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <Link
-                    href="/app"
-                    className="block w-full py-3 bg-gradient-to-r from-blue-600 to-blue-700 hover:from-blue-700 hover:to-blue-800 text-white text-center rounded-xl font-semibold transition-all"
-                  >
-                    Start Free Trial
-                  </Link>
-                  <p className="text-center text-sm text-gray-600 mt-3">
-                    No credit card required
-                  </p>
-                </div>
-              </motion.div>
-
-              {/* Team Plan */}
-              <motion.div
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="relative"
-              >
-                <div className="h-full bg-white border-2 border-gray-200 rounded-2xl p-8 hover:border-gray-300 transition-all duration-300">
-                  <h3 className="text-2xl font-bold mb-2">Team</h3>
-                  <div className="mb-6">
-                    <span className="text-4xl font-bold">
-                      ${billingCycle === "monthly" ? "49" : "39"}
-                    </span>
-                    <span className="text-gray-600">/month</span>
-                    {billingCycle === "annual" && (
-                      <p className="text-sm text-green-600 mt-1">Billed annually</p>
-                    )}
-                  </div>
-                  <p className="text-gray-600 mb-8">For agencies and teams</p>
-                  
-                  <ul className="space-y-4 mb-8">
-                    {[
-                      "Everything in Pro",
-                      "5 Team Members",
-                      "Team Analytics",
-                      "White Label",
-                      "API Access",
-                      "Dedicated Support",
-                    ].map((feature, i) => (
-                      <li key={i} className="flex items-center gap-3">
-                        <CheckCircle className="w-5 h-5 text-green-500 flex-shrink-0" />
-                        <span className="text-gray-700">{feature}</span>
-                      </li>
-                    ))}
-                  </ul>
-
-                  <button className="block w-full py-3 bg-gray-100 hover:bg-gray-200 text-center rounded-xl font-semibold transition-colors">
-                    Contact Sales
-                  </button>
-                </div>
-              </motion.div>
-            </div>
-
-            {/* Money-back guarantee */}
-            <motion.div
-              initial={{ opacity: 0 }}
-              whileInView={{ opacity: 1 }}
-              viewport={{ once: true }}
-              className="mt-12 text-center"
-            >
-              <div className="inline-flex items-center gap-3 bg-green-50 border border-green-200 rounded-full px-6 py-3">
-                <Shield className="w-5 h-5 text-green-600" />
-                <span className="text-green-800 font-medium">
-                  30-day money-back guarantee. No questions asked.
-                </span>
-              </div>
-            </motion.div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* Final CTA */}
       <section className="py-24 bg-gradient-to-br from-blue-600 to-purple-600 text-white relative overflow-hidden">
@@ -748,8 +526,7 @@ export default function PremiumLandingPage() {
               Ready to Get 3x More Interviews?
             </h2>
             <p className="text-xl mb-8 opacity-90">
-              Join {portfolioCount.toLocaleString()} professionals who stopped waiting for 
-              ATS algorithms to notice them.
+              Stop waiting for ATS algorithms to notice you.
             </p>
             
             <Link
@@ -771,7 +548,7 @@ export default function PremiumLandingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5" />
-                <span>Cancel anytime</span>
+                <span>Setup in minutes</span>
               </div>
             </div>
           </div>
