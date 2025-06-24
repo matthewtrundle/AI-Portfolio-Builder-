@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import {
   Eye,
@@ -40,11 +40,12 @@ export default function PreviewPortfolio({
   const pin = data?.pin || "";
 
   // Simulate AI generation
-  useState(() => {
-    setTimeout(() => {
+  useEffect(() => {
+    const timer = setTimeout(() => {
       setIsGenerating(false);
     }, 3000);
-  });
+    return () => clearTimeout(timer);
+  }, []);
 
   const handleCopy = () => {
     navigator.clipboard.writeText(generatedCode);
