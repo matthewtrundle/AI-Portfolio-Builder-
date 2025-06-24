@@ -61,7 +61,13 @@ const portfolioSchema = z.object({
 type PortfolioFormData = z.infer<typeof portfolioSchema>;
 
 interface OnboardingFormProps {
-  onSubmit: (data: PortfolioFormData) => void;
+  onSubmit: (data: PortfolioFormData & {
+    generatedContent?: string;
+    generatedCode?: string;
+    url?: string;
+    pin?: string;
+    slug?: string;
+  }) => void;
   initialData?: Partial<PortfolioFormData>;
 }
 
