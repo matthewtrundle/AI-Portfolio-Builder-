@@ -1,0 +1,18 @@
+# Ignore files for Vercel deployment
+README.md
+.git
+.gitignore
+node_modules
+.env.local
+.env*.local
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.DS_Store
+*.pem
+.vscode
+.idea
+*.swp
+*.swo
+*~
+.vercel
