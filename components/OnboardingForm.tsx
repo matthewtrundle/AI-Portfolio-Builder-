@@ -15,6 +15,7 @@ import {
   Plus,
   Trash2,
   ChevronRight,
+  CheckCircle,
 } from "lucide-react";
 
 // Form schema
@@ -59,7 +60,12 @@ const portfolioSchema = z.object({
 
 type PortfolioFormData = z.infer<typeof portfolioSchema>;
 
-export default function OnboardingForm({ onSubmit }: { onSubmit: (data: PortfolioFormData) => void }) {
+interface OnboardingFormProps {
+  onSubmit: (data: PortfolioFormData) => void;
+  initialData?: Partial<PortfolioFormData>;
+}
+
+export default function OnboardingForm({ onSubmit, initialData }: OnboardingFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
 
@@ -73,10 +79,20 @@ export default function OnboardingForm({ onSubmit }: { onSubmit: (data: Portfoli
   } = useForm<PortfolioFormData>({
     resolver: zodResolver(portfolioSchema),
     defaultValues: {
-      experiences: [{ company: "", role: "", duration: "", achievements: [""] }],
-      projects: [],
-      technicalSkills: [],
-      targetRoles: [],
+      name: initialData?.name || "",
+      title: initialData?.title || "",
+      email: initialData?.email || "",
+      location: initialData?.location || "",
+      linkedin: initialData?.linkedin || "",
+      github: initialData?.github || "",
+      currentRole: initialData?.currentRole || "",
+      yearsExperience: initialData?.yearsExperience || "",
+      keyAchievement: initialData?.keyAchievement || "",
+      experiences: initialData?.experiences?.length ? initialData.experiences : [{ company: "", role: "", duration: "", achievements: [""] }],
+      projects: initialData?.projects || [],
+      technicalSkills: initialData?.technicalSkills || [],
+      targetRoles: initialData?.targetRoles || [],
+      uniqueValue: initialData?.uniqueValue || "",
     },
   });
 
@@ -136,6 +152,27 @@ export default function OnboardingForm({ onSubmit }: { onSubmit: (data: Portfoli
 
   return (
     <div className="max-w-4xl mx-auto">
+      {/* Resume Data Notice */}
+      {initialData && Object.keys(initialData).length > 0 && (
+        <motion.div
+          initial={{ opacity: 0, y: -20 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mb-6 bg-green-50 border border-green-200 rounded-lg p-4"
+        >
+          <div className="flex items-start gap-3">
+            <CheckCircle className="w-5 h-5 text-green-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-green-900">
+                We've pre-filled information from your resume!
+              </p>
+              <p className="text-sm text-green-700 mt-1">
+                Review each section and add any missing details to create your perfect portfolio.
+              </p>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
       {/* Progress Bar */}
       <div className="mb-8">
         <div className="flex items-center justify-between mb-4">

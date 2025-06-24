@@ -33,6 +33,7 @@
     "prismjs": "^1.29.0",
     "react": "^18",
     "react-dom": "^18",
+    "react-dropzone": "^14.3.8",
     "react-email": "^4.0.16",
     "react-hook-form": "^7.48.2",
     "react-simple-code-editor": "^0.13.1",
