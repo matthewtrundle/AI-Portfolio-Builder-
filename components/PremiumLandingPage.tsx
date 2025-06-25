@@ -230,46 +230,23 @@ export default function PremiumLandingPage() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="relative hidden lg:block"
             >
-              <div className="relative">
-                {/* Decorative elements */}
-                <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl blur-2xl opacity-20 animate-pulse" />
-                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-75" />
+              <div className="relative group">
+                {/* Subtle glow effect */}
+                <div className="absolute -inset-2 bg-gradient-to-r from-blue-400 to-purple-400 rounded-2xl opacity-0 group-hover:opacity-20 blur-xl transition-opacity duration-500" />
                 
-                {/* Resume image */}
-                <div className="relative bg-white rounded-xl overflow-hidden shadow-2xl">
-                  <Image
-                    src="/images/Resume.png"
-                    alt="Portfolio example"
-                    width={600}
-                    height={800}
-                    className="w-full h-auto"
-                    priority
-                  />
-                  
-                  {/* Overlay with "Example" badge */}
-                  <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
-                    Live Example
+                {/* Resume image with elegant border */}
+                <div className="relative bg-gradient-to-r from-blue-500 to-purple-500 p-1 rounded-2xl">
+                  <div className="bg-white rounded-xl overflow-hidden">
+                    <Image
+                      src="/images/Resume.png"
+                      alt="Portfolio example"
+                      width={600}
+                      height={800}
+                      className="w-full h-auto transition-transform duration-300 group-hover:scale-[1.02]"
+                      priority
+                    />
                   </div>
                 </div>
-                
-                {/* Floating feature badges */}
-                <motion.div
-                  className="absolute -left-4 top-20 bg-white rounded-lg shadow-xl p-3 flex items-center gap-2"
-                  animate={{ y: [0, -10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity }}
-                >
-                  <Eye className="w-5 h-5 text-blue-600" />
-                  <span className="text-sm font-semibold">Interactive</span>
-                </motion.div>
-                
-                <motion.div
-                  className="absolute -right-4 bottom-20 bg-white rounded-lg shadow-xl p-3 flex items-center gap-2"
-                  animate={{ y: [0, 10, 0] }}
-                  transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
-                >
-                  <Zap className="w-5 h-5 text-purple-600" />
-                  <span className="text-sm font-semibold">AI-Powered</span>
-                </motion.div>
               </div>
             </motion.div>
           </div>
