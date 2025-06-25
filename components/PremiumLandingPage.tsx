@@ -7,6 +7,9 @@ import Image from "next/image";
 import HeroImageSection from "./HeroImageSection";
 import FeatureImageGrid from "./FeatureImageGrid";
 import TransformationShowcase from "./TransformationShowcase";
+import AnimatedStats from "./AnimatedStats";
+import ScrollProgress from "./ScrollProgress";
+import FloatingCTA from "./FloatingCTA";
 import {
   Sparkles,
   TrendingUp,
@@ -108,6 +111,12 @@ export default function PremiumLandingPage() {
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
+      {/* Scroll Progress */}
+      <ScrollProgress />
+      
+      {/* Floating CTA */}
+      <FloatingCTA />
+      
       {/* Noise texture overlay */}
       <div className="fixed inset-0 opacity-[0.015] pointer-events-none">
         <svg width="100%" height="100%">
@@ -233,13 +242,6 @@ export default function PremiumLandingPage() {
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Link>
-              
-              <button className="group px-8 py-4 bg-white border-2 border-gray-200 rounded-full font-semibold text-lg transition-all duration-300 hover:border-gray-300 hover:shadow-lg hover:-translate-y-1">
-                <span className="flex items-center justify-center gap-2">
-                  <Play className="w-5 h-5" />
-                  Watch 2-Min Demo
-                </span>
-              </button>
             </motion.div>
 
             {/* Trust indicators with animation */}
@@ -281,6 +283,9 @@ export default function PremiumLandingPage() {
           <HeroImageSection />
         </div>
       </section>
+
+      {/* Animated Stats */}
+      <AnimatedStats />
 
       {/* Problem Agitation with Premium Cards */}
       <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
