@@ -1064,7 +1064,10 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
                             onClick={() => setCurrentStep(Number(stepIndex))}
                             className="text-sm font-medium text-yellow-800 hover:text-yellow-900 flex items-center gap-1 mb-1"
                           >
-                            <steps[Number(stepIndex)].icon className="w-4 h-4" />
+                            {(() => {
+                              const Icon = steps[Number(stepIndex)].icon;
+                              return <Icon className="w-4 h-4" />;
+                            })()}
                             {steps[Number(stepIndex)].title}
                           </button>
                           <ul className="text-sm text-yellow-700 ml-5 space-y-0.5">
