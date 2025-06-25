@@ -182,6 +182,22 @@ export default function EvolutionTimeline() {
                   >
                     <div className={`${step.bgColor} rounded-3xl shadow-xl overflow-hidden group cursor-pointer`}>
                       <div className="relative h-48 bg-gradient-to-br from-white/50 to-transparent">
+                        {/* Background image container - ready for future use */}
+                        <div className="absolute inset-0">
+                          {step.image && (
+                            <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
+                              {/* Image placeholder - uncomment when images are added
+                              <Image
+                                src={step.image}
+                                alt={`${step.title} era`}
+                                fill
+                                className="object-cover"
+                              />
+                              */}
+                            </div>
+                          )}
+                        </div>
+                        
                         {/* Decorative background pattern */}
                         <div className="absolute inset-0 opacity-10">
                           <div className="absolute top-4 right-4 w-32 h-32 rounded-full bg-gradient-to-r from-gray-400 to-transparent blur-2xl" />
@@ -200,7 +216,7 @@ export default function EvolutionTimeline() {
                         </div>
                         
                         {/* Year badge */}
-                        <div className="absolute top-6 left-6">
+                        <div className="absolute top-6 left-6 z-10">
                           <div className={`inline-flex items-center px-4 py-2 rounded-full bg-gradient-to-r ${step.color} text-white font-bold text-sm shadow-lg`}>
                             {step.year}
                           </div>

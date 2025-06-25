@@ -274,101 +274,30 @@ export default function PremiumLandingPage() {
                   }}
                 />
                 
-                {/* Glassmorphism container */}
-                <div className="relative transform-gpu group-hover:rotate-y-5 transition-all duration-700">
-                  {/* Glass background */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-white/90 to-white/70 backdrop-blur-xl rounded-3xl border border-white/20 shadow-2xl" />
-                  
-                  {/* Top bar with live indicator */}
-                  <div className="relative z-10 p-4 border-b border-gray-200/20">
-                    <div className="flex items-center justify-between">
-                      <div className="flex items-center gap-2">
-                        <div className="w-3 h-3 bg-green-500 rounded-full animate-pulse" />
-                        <span className="text-sm font-medium text-gray-700">Live Portfolio</span>
-                      </div>
-                      <div className="flex gap-1.5">
-                        <div className="w-3 h-3 bg-red-400 rounded-full" />
-                        <div className="w-3 h-3 bg-yellow-400 rounded-full" />
-                        <div className="w-3 h-3 bg-green-400 rounded-full" />
+                {/* Sophisticated card container */}
+                <div className="relative transform-gpu transition-all duration-700">
+                  {/* Premium glass card effect */}
+                  <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
+                    {/* Subtle gradient overlay */}
+                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/30 pointer-events-none" />
+                    
+                    {/* Resume content */}
+                    <div className="relative p-6">
+                      <div className="relative overflow-hidden rounded-2xl">
+                        <Image
+                          src="/images/Resume.png"
+                          alt="Interactive portfolio example"
+                          width={600}
+                          height={800}
+                          className="w-full h-auto"
+                          priority
+                        />
                       </div>
                     </div>
+                    
+                    {/* Bottom gradient fade */}
+                    <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
                   </div>
-                  
-                  {/* Resume content with depth */}
-                  <div className="relative p-2">
-                    <div className="relative overflow-hidden rounded-2xl group-hover:shadow-2xl transition-shadow duration-500">
-                      <Image
-                        src="/images/Resume.png"
-                        alt="Interactive portfolio example"
-                        width={600}
-                        height={800}
-                        className="w-full h-auto transition-all duration-500 group-hover:scale-[1.03] group-hover:brightness-105"
-                        priority
-                      />
-                      
-                      {/* Interactive overlay on hover */}
-                      <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500">
-                        <div className="absolute bottom-4 left-4 right-4 text-white transform translate-y-4 group-hover:translate-y-0 transition-transform duration-500">
-                          <p className="text-sm font-medium mb-2">Click to explore:</p>
-                          <div className="flex flex-wrap gap-2">
-                            <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs">Video Intro</span>
-                            <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs">Live Projects</span>
-                            <span className="px-3 py-1 bg-white/20 backdrop-blur-md rounded-full text-xs">Testimonials</span>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                  
-                  {/* Floating elements */}
-                  <motion.div
-                    className="absolute -top-6 -right-6 bg-gradient-to-br from-blue-500 to-purple-500 p-3 rounded-2xl shadow-xl"
-                    animate={{
-                      y: [-5, 5, -5],
-                      rotate: [-5, 5, -5],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut"
-                    }}
-                  >
-                    <Play className="w-6 h-6 text-white" />
-                  </motion.div>
-                  
-                  <motion.div
-                    className="absolute -bottom-4 -left-4 bg-gradient-to-br from-purple-500 to-pink-500 p-3 rounded-2xl shadow-xl"
-                    animate={{
-                      y: [5, -5, 5],
-                      rotate: [5, -5, 5],
-                    }}
-                    transition={{
-                      duration: 4,
-                      repeat: Infinity,
-                      ease: "easeInOut",
-                      delay: 1
-                    }}
-                  >
-                    <Briefcase className="w-6 h-6 text-white" />
-                  </motion.div>
-                  
-                  {/* Stats overlay */}
-                  <motion.div
-                    className="absolute top-1/2 -right-20 bg-white/90 backdrop-blur-md p-4 rounded-2xl shadow-xl border border-gray-200/20"
-                    initial={{ opacity: 0, x: 20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: 1.5 }}
-                  >
-                    <div className="flex items-center gap-3">
-                      <div className="p-2 bg-gradient-to-br from-green-400 to-green-500 rounded-xl">
-                        <TrendingUp className="w-5 h-5 text-white" />
-                      </div>
-                      <div>
-                        <p className="text-2xl font-bold text-gray-900">73%</p>
-                        <p className="text-xs text-gray-600">More interviews</p>
-                      </div>
-                    </div>
-                  </motion.div>
                 </div>
               </div>
             </motion.div>
@@ -397,107 +326,6 @@ export default function PremiumLandingPage() {
         <EvolutionTimeline />
       </section>
       
-      {/* Social Proof Section */}
-      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold mb-4 text-gray-900">
-              Trusted by Professionals Who Got Hired At
-            </h2>
-          </motion.div>
-          
-          {/* Company logos */}
-          <div className="flex flex-wrap items-center justify-center gap-12 mb-20 opacity-60">
-            {['Google', 'Microsoft', 'Apple', 'Amazon', 'Meta', 'Netflix'].map((company, index) => (
-              <motion.div
-                key={company}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="text-2xl font-bold text-gray-400"
-              >
-                {company}
-              </motion.div>
-            ))}
-          </div>
-          
-          {/* Testimonials Grid */}
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[
-              {
-                name: "Sarah Chen",
-                role: "Senior Product Designer",
-                company: "Previously at Spotify",
-                image: "👩‍💻",
-                quote: "CareerCanvas helped me showcase my design process in a way that a traditional resume never could. I got 5 interview requests in my first week!",
-                highlight: "5 interviews in 1 week"
-              },
-              {
-                name: "Marcus Johnson",
-                role: "Full Stack Developer",
-                company: "Now at Microsoft",
-                image: "👨‍💻",
-                quote: "Being able to embed live demos of my projects was a game-changer. Recruiters could actually see my code in action.",
-                highlight: "3x response rate"
-              },
-              {
-                name: "Elena Rodriguez",
-                role: "Data Scientist",
-                company: "Landed role at Tesla",
-                image: "👩‍🔬",
-                quote: "The analytics showed me exactly which projects recruiters spent time on. I optimized my portfolio and landed my dream job!",
-                highlight: "Dream job in 30 days"
-              }
-            ].map((testimonial, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.2 }}
-                className="group"
-              >
-                <div className="relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 h-full border border-gray-100">
-                  {/* Glassmorphism effect on hover */}
-                  <div className="absolute inset-0 bg-gradient-to-br from-blue-50/50 to-purple-50/50 rounded-2xl opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-                  
-                  <div className="relative z-10">
-                    {/* Avatar and info */}
-                    <div className="flex items-start gap-4 mb-6">
-                      <div className="text-4xl">{testimonial.image}</div>
-                      <div className="flex-1">
-                        <h4 className="font-bold text-gray-900">{testimonial.name}</h4>
-                        <p className="text-sm text-gray-600">{testimonial.role}</p>
-                        <p className="text-xs text-gray-500 mt-1">{testimonial.company}</p>
-                      </div>
-                    </div>
-                    
-                    {/* Quote */}
-                    <blockquote className="text-gray-700 mb-6 italic">
-                      "{testimonial.quote}"
-                    </blockquote>
-                    
-                    {/* Highlight */}
-                    <div className="inline-flex items-center gap-2 px-4 py-2 bg-gradient-to-r from-green-50 to-blue-50 rounded-full">
-                      <CheckCircle className="w-4 h-4 text-green-600" />
-                      <span className="text-sm font-semibold text-gray-900">{testimonial.highlight}</span>
-                    </div>
-                  </div>
-                  
-                  {/* Decorative element */}
-                  <div className="absolute top-6 right-6 text-6xl opacity-10">"</div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Problem Agitation with Premium Cards */}
       <section className="py-40 bg-gradient-to-b from-gray-50 via-white to-gray-50 relative overflow-hidden">
@@ -936,59 +764,6 @@ export default function PremiumLandingPage() {
       </section>
 
 
-      {/* Success Metrics */}
-      <section className="py-24 bg-gradient-to-b from-white to-blue-50">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="text-center mb-16"
-          >
-            <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-              Real Results From Real Professionals
-            </h2>
-          </motion.div>
-          
-          <div className="grid md:grid-cols-4 gap-8 max-w-5xl mx-auto">
-            {[
-              { number: "10,000+", label: "Success Stories", icon: Star },
-              { number: "73%", label: "More Interviews", icon: TrendingUp },
-              { number: "2.5x", label: "Faster Hiring", icon: Clock },
-              { number: "92%", label: "Satisfaction Rate", icon: Award },
-            ].map((stat, index) => (
-              <motion.div
-                key={index}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: index * 0.1 }}
-                className="text-center group"
-              >
-                <div className="relative">
-                  <motion.div
-                    className="absolute inset-0 bg-gradient-to-br from-blue-400 to-purple-400 rounded-2xl blur-2xl opacity-20 group-hover:opacity-40 transition-opacity"
-                    animate={{ scale: [0.8, 1.2, 0.8] }}
-                    transition={{ duration: 4, repeat: Infinity }}
-                  />
-                  <div className="relative bg-white p-8 rounded-2xl shadow-lg hover:shadow-2xl transition-all duration-300 border border-gray-100">
-                    <stat.icon className="w-8 h-8 text-blue-600 mx-auto mb-4" />
-                    <motion.h3
-                      className="text-4xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent mb-2"
-                      initial={{ scale: 0.5 }}
-                      whileInView={{ scale: 1 }}
-                      transition={{ type: "spring", duration: 0.6 }}
-                    >
-                      {stat.number}
-                    </motion.h3>
-                    <p className="text-gray-600">{stat.label}</p>
-                  </div>
-                </div>
-              </motion.div>
-            ))}
-          </div>
-        </div>
-      </section>
 
       {/* Final CTA */}
       <section className="py-32 relative overflow-hidden">
