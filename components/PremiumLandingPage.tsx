@@ -10,6 +10,7 @@ import TransformationShowcase from "./TransformationShowcase";
 import AnimatedStats from "./AnimatedStats";
 import ScrollProgress from "./ScrollProgress";
 import FloatingCTA from "./FloatingCTA";
+import EvolutionTimeline from "./EvolutionTimeline";
 import {
   Sparkles,
   TrendingUp,
@@ -204,14 +205,14 @@ export default function PremiumLandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-6xl md:text-7xl lg:text-8xl font-bold leading-tight mb-6"
+              className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
             >
               <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
-                Get 3x More
+                Your Story Deserves
               </span>
               <br />
               <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                Interviews
+                More Than a Resume
               </span>
             </motion.h1>
 
@@ -221,8 +222,8 @@ export default function PremiumLandingPage() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed"
             >
-              Your resume gets trapped in ATS filters. Your AI portfolio goes{" "}
-              <span className="font-semibold text-gray-900">straight to hiring managers</span>.
+              Welcome to the evolution of professional storytelling. Share your projects,{" "}
+              <span className="font-semibold text-gray-900">showcase your journey</span>, and connect authentically.
             </motion.p>
 
             {/* CTA buttons with hover effects */}
@@ -237,7 +238,7 @@ export default function PremiumLandingPage() {
                 className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
               >
                 <span className="relative z-10 flex items-center justify-center gap-2">
-                  Create My Portfolio
+                  Begin Your Story
                   <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
                 </span>
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
@@ -253,15 +254,15 @@ export default function PremiumLandingPage() {
             >
               <div className="flex items-center gap-2">
                 <CheckCircle className="w-5 h-5 text-green-500" />
-                <span className="text-gray-600">No credit card required</span>
+                <span className="text-gray-600">Free to start your journey</span>
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5 text-blue-500" />
-                <span className="text-gray-600">SOC2 compliant</span>
+                <span className="text-gray-600">Your story, protected</span>
               </div>
               <div className="flex items-center gap-2">
                 <Clock className="w-5 h-5 text-purple-500" />
-                <span className="text-gray-600">Setup in 5 minutes</span>
+                <span className="text-gray-600">Begin in minutes</span>
               </div>
             </motion.div>
           </div>
@@ -287,6 +288,9 @@ export default function PremiumLandingPage() {
       {/* Animated Stats */}
       <AnimatedStats />
 
+      {/* Evolution Timeline */}
+      <EvolutionTimeline />
+
       {/* Problem Agitation with Premium Cards */}
       <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
@@ -299,11 +303,11 @@ export default function PremiumLandingPage() {
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  The Resume Game is Rigged
+                  The World Has Changed
                 </span>
               </h2>
               <p className="text-xl text-gray-600">
-                And you're playing by outdated rules
+                The way we share our professional stories hasn't
               </p>
             </div>
 
@@ -321,15 +325,15 @@ export default function PremiumLandingPage() {
                     <div className="p-3 bg-red-100 rounded-xl">
                       <XCircle className="w-8 h-8 text-red-600" />
                     </div>
-                    <h3 className="text-2xl font-bold">Traditional Resume</h3>
+                    <h3 className="text-2xl font-bold">Yesterday's Format</h3>
                   </div>
                   
                   <div className="space-y-4">
                     {[
-                      { stat: "75%", desc: "Never reach human eyes" },
-                      { stat: "6 sec", desc: "Average review time" },
-                      { stat: "3%", desc: "Interview rate" },
-                      { stat: "Static", desc: "Can't show real work" },
+                      { stat: "Text", desc: "Limited to words on a page" },
+                      { stat: "Keywords", desc: "Reduced to searchable terms" },
+                      { stat: "One-way", desc: "No interaction or engagement" },
+                      { stat: "Past", desc: "Focus on where you've been" },
                     ].map((item, index) => (
                       <motion.div
                         key={index}
@@ -362,15 +366,15 @@ export default function PremiumLandingPage() {
                     <div className="p-3 bg-blue-100 rounded-xl">
                       <CheckCircle className="w-8 h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-bold">AI Portfolio</h3>
+                    <h3 className="text-2xl font-bold">Tomorrow's Portfolio</h3>
                   </div>
                   
                   <div className="space-y-4">
                     {[
-                      { stat: "100%", desc: "Direct to hiring managers" },
-                      { stat: "2.5 min", desc: "Average engagement time" },
-                      { stat: "27%", desc: "Interview rate" },
-                      { stat: "Dynamic", desc: "Live demos & projects" },
+                      { stat: "Rich", desc: "Videos, projects, and stories" },
+                      { stat: "Human", desc: "Personality shines through" },
+                      { stat: "Interactive", desc: "Engage with your work" },
+                      { stat: "Future", desc: "Shows what you can do" },
                     ].map((item, index) => (
                       <motion.div
                         key={index}
@@ -408,10 +412,10 @@ export default function PremiumLandingPage() {
               <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
               <div className="absolute bottom-8 left-8 right-8">
                 <p className="text-white text-2xl font-bold mb-2">
-                  Stop competing on keywords. Start connecting with humans.
+                  Every career has a story worth telling.
                 </p>
                 <p className="text-gray-200">
-                  Your portfolio tells your story in a way resumes never could.
+                  Finally, a way to share yours that feels authentic and complete.
                 </p>
               </div>
             </motion.div>
@@ -431,11 +435,11 @@ export default function PremiumLandingPage() {
             <div className="text-center mb-16">
               <h2 className="text-4xl md:text-5xl font-bold mb-4">
                 <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  From Zero to Hired in 3 Steps
+                  Your Journey Starts Here
                 </span>
               </h2>
               <p className="text-xl text-gray-600">
-                No coding. No design skills. Just results.
+                Transform your experience into an interactive story
               </p>
             </div>
 
@@ -444,22 +448,22 @@ export default function PremiumLandingPage() {
                 {
                   step: "01",
                   icon: FileText,
-                  title: "Share Your Story",
-                  description: "Tell us about your experience. Our AI understands context, not just keywords.",
+                  title: "Begin With Your Story",
+                  description: "Upload your resume or share your experience. Every journey is unique and valuable.",
                   gradient: "from-blue-500 to-cyan-500",
                 },
                 {
                   step: "02",
                   icon: Bot,
-                  title: "AI Creates Magic",
-                  description: "Watch as AI crafts compelling content that highlights your unique value.",
+                  title: "AI Amplifies Your Voice",
+                  description: "Our AI helps structure your story while keeping your authentic voice and personality.",
                   gradient: "from-purple-500 to-pink-500",
                 },
                 {
                   step: "03",
                   icon: Globe,
-                  title: "Share & Get Hired",
-                  description: "Get your unique link. Add to LinkedIn. Watch interview requests roll in.",
+                  title: "Connect Meaningfully",
+                  description: "Share your portfolio and create genuine connections with teams that value your journey.",
                   gradient: "from-orange-500 to-red-500",
                 },
               ].map((item, index) => (
@@ -595,17 +599,17 @@ export default function PremiumLandingPage() {
         >
           <div className="max-w-4xl mx-auto text-center text-white">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
-              Ready to Get 3x More Interviews?
+              Ready to Share Your Full Story?
             </h2>
             <p className="text-xl mb-8 text-gray-100">
-              Stop waiting for ATS algorithms to notice you.
+              Join the evolution of professional storytelling.
             </p>
             
             <Link
               href="/app"
               className="inline-flex items-center gap-2 px-8 py-4 bg-white text-blue-600 rounded-full font-semibold text-lg hover:shadow-2xl transition-all duration-300 hover:-translate-y-1"
             >
-              Create My Portfolio Now
+              Start Your Journey
               <ArrowUpRight className="w-5 h-5" />
             </Link>
             
@@ -620,7 +624,7 @@ export default function PremiumLandingPage() {
               </div>
               <div className="flex items-center gap-2">
                 <Shield className="w-5 h-5" />
-                <span>Setup in minutes</span>
+                <span>Your data is secure</span>
               </div>
             </div>
           </div>
