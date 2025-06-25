@@ -43,28 +43,6 @@ export default function PremiumLandingPage() {
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
   
 
-  // Live activity simulation
-  const [recentActivity, setRecentActivity] = useState([
-    { name: "Sarah C.", location: "San Francisco", time: "2 min ago" },
-    { name: "Mike T.", location: "New York", time: "5 min ago" },
-    { name: "Jessica L.", location: "Austin", time: "8 min ago" },
-  ]);
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      const names = ["Alex", "Emma", "David", "Lisa", "John", "Maria"];
-      const locations = ["Seattle", "Boston", "Chicago", "Denver", "Miami", "Portland"];
-      const newActivity = {
-        name: `${names[Math.floor(Math.random() * names.length)]} ${String.fromCharCode(65 + Math.floor(Math.random() * 26))}.`,
-        location: locations[Math.floor(Math.random() * locations.length)],
-        time: "just now"
-      };
-      
-      setRecentActivity(prev => [newActivity, ...prev.slice(0, 2)]);
-    }, 15000);
-
-    return () => clearInterval(interval);
-  }, []);
 
 
   return (
@@ -97,13 +75,13 @@ export default function PremiumLandingPage() {
             <div className="flex items-center gap-2">
               <Image 
                 src="/images/logo.png" 
-                alt="CareerCanvas Logo" 
+                alt="StoryFolio Logo" 
                 width={40} 
                 height={40} 
                 className="object-contain"
               />
               <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                CareerCanvas
+                StoryFolio
               </span>
             </div>
 
@@ -416,10 +394,26 @@ export default function PremiumLandingPage() {
                     >
                       <div className="p-5 bg-gradient-to-br from-red-100 to-orange-100 rounded-2xl shadow-lg">
                         <svg className="w-10 h-10 text-red-600" viewBox="0 0 24 24" fill="none">
-                          <path d="M9 11H7a1 1 0 100 2h2a1 1 0 100-2zM13 11h-2a1 1 0 100 2h2a1 1 0 100-2zM17 11h-2a1 1 0 100 2h2a1 1 0 100-2z" fill="currentColor"/>
-                          <path d="M20 8h-1V6a3 3 0 00-3-3H8a3 3 0 00-3 3v2H4a1 1 0 00-1 1v10a3 3 0 003 3h12a3 3 0 003-3V9a1 1 0 00-1-1zM7 6a1 1 0 011-1h8a1 1 0 011 1v2H7V6zm12 13a1 1 0 01-1 1H6a1 1 0 01-1-1v-9h14v9z" fill="currentColor"/>
-                          <circle cx="12" cy="2" r="2" fill="currentColor" opacity="0.3"/>
-                          <path d="M2 12L4 14M22 12L20 14" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                          <motion.g
+                            animate={{ y: [0, -2, 0] }}
+                            transition={{ duration: 3, repeat: Infinity }}
+                          >
+                            <path d="M9 2L3 8V22H21V8L15 2H9Z" stroke="currentColor" strokeWidth="2" strokeLinejoin="round"/>
+                            <path d="M3 8H21" stroke="currentColor" strokeWidth="2"/>
+                            <path d="M9 2V8H15V2" stroke="currentColor" strokeWidth="2"/>
+                            <rect x="7" y="12" width="10" height="1" fill="currentColor" opacity="0.3"/>
+                            <rect x="7" y="15" width="8" height="1" fill="currentColor" opacity="0.3"/>
+                            <rect x="7" y="18" width="6" height="1" fill="currentColor" opacity="0.3"/>
+                          </motion.g>
+                          <motion.path
+                            d="M17 6L19 4M19 4L21 2M19 4L21 6M19 4L17 2"
+                            stroke="currentColor"
+                            strokeWidth="1.5"
+                            strokeLinecap="round"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: [0, 1, 0] }}
+                            transition={{ duration: 2, repeat: Infinity, delay: 0.5 }}
+                          />
                         </svg>
                       </div>
                       <motion.div
@@ -547,36 +541,43 @@ export default function PremiumLandingPage() {
                     >
                       <div className="p-5 bg-gradient-to-br from-blue-100 via-purple-100 to-pink-100 rounded-2xl shadow-lg">
                         <svg className="w-10 h-10 text-blue-600" viewBox="0 0 24 24" fill="none">
-                          <motion.path
-                            d="M12 2L2 7L12 12L22 7L12 2Z"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
+                          <motion.g
+                            animate={{ scale: [1, 1.05, 1] }}
                             transition={{ duration: 2, repeat: Infinity }}
-                          />
-                          <motion.path
-                            d="M2 17L12 22L22 17"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ duration: 2, delay: 0.5, repeat: Infinity }}
-                          />
-                          <motion.path
-                            d="M2 12L12 17L22 12"
-                            stroke="currentColor"
-                            strokeWidth="2"
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            initial={{ pathLength: 0 }}
-                            animate={{ pathLength: 1 }}
-                            transition={{ duration: 2, delay: 1, repeat: Infinity }}
-                          />
+                          >
+                            <rect x="3" y="4" width="18" height="16" rx="2" stroke="currentColor" strokeWidth="2"/>
+                            <path d="M8 4V2M16 4V2" stroke="currentColor" strokeWidth="2" strokeLinecap="round"/>
+                            <motion.circle
+                              cx="8"
+                              cy="10"
+                              r="2"
+                              fill="currentColor"
+                              animate={{ scale: [1, 1.3, 1], opacity: [0.8, 1, 0.8] }}
+                              transition={{ duration: 2, repeat: Infinity, delay: 0 }}
+                            />
+                            <motion.rect
+                              x="11"
+                              y="8"
+                              width="8"
+                              height="4"
+                              rx="1"
+                              fill="currentColor"
+                              opacity="0.3"
+                              animate={{ width: [8, 6, 8] }}
+                              transition={{ duration: 2, repeat: Infinity, delay: 0.3 }}
+                            />
+                            <motion.path
+                              d="M5 15L7 17L10 14"
+                              stroke="currentColor"
+                              strokeWidth="2"
+                              strokeLinecap="round"
+                              strokeLinejoin="round"
+                              initial={{ pathLength: 0 }}
+                              animate={{ pathLength: [0, 1, 1, 0] }}
+                              transition={{ duration: 3, repeat: Infinity, times: [0, 0.3, 0.7, 1] }}
+                            />
+                            <rect x="12" y="15" width="6" height="1" fill="currentColor" opacity="0.3"/>
+                          </motion.g>
                         </svg>
                       </div>
                       <motion.div
@@ -808,8 +809,7 @@ export default function PremiumLandingPage() {
               viewport={{ once: true }}
               className="text-xl md:text-2xl mb-12 text-gray-100 max-w-3xl mx-auto leading-relaxed"
             >
-              Join thousands of professionals who've transformed their careers with CareerCanvas.
-              Your next opportunity is waiting.
+              Begin your next chapter with a portfolio that truly represents you.
             </motion.p>
             
             <motion.div
@@ -851,33 +851,6 @@ export default function PremiumLandingPage() {
               <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
                 <Shield className="w-5 h-5 text-purple-400" />
                 <span>Bank-level security</span>
-              </div>
-            </motion.div>
-            
-            {/* Live activity feed */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ delay: 1 }}
-              className="mt-16 max-w-md mx-auto"
-            >
-              <p className="text-sm text-gray-300 mb-4">Join professionals getting hired right now:</p>
-              <div className="space-y-2">
-                {recentActivity.map((activity, index) => (
-                  <motion.div
-                    key={index}
-                    initial={{ opacity: 0, x: -20 }}
-                    animate={{ opacity: 1, x: 0 }}
-                    transition={{ delay: index * 0.2 }}
-                    className="flex items-center gap-3 bg-white/10 backdrop-blur-sm px-4 py-3 rounded-lg"
-                  >
-                    <div className="w-2 h-2 bg-green-400 rounded-full animate-pulse" />
-                    <span className="text-sm">
-                      <span className="font-semibold">{activity.name}</span> from {activity.location} just created their portfolio
-                    </span>
-                    <span className="text-xs text-gray-400 ml-auto">{activity.time}</span>
-                  </motion.div>
-                ))}
               </div>
             </motion.div>
           </div>
