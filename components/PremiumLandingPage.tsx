@@ -143,9 +143,6 @@ export default function PremiumLandingPage() {
               <Link href="#features" className="text-gray-600 hover:text-gray-900 transition-colors">
                 Features
               </Link>
-              <Link href="#testimonials" className="text-gray-600 hover:text-gray-900 transition-colors">
-                Success Stories
-              </Link>
               <Link
                 href="/auth/signin"
                 className="text-gray-900 font-medium hover:text-gray-700 transition-colors"
