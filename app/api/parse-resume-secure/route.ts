@@ -10,8 +10,6 @@ import {
   containsSensitiveInfo,
   sanitizeInput
 } from "@/lib/security-guardrails";
-import pdf from "pdf-parse";
-import mammoth from "mammoth";
 
 // Helper function to check file signatures
 function isValidFileSignature(buffer: ArrayBuffer, fileName: string): boolean {
@@ -113,8 +111,49 @@ export async function POST(request: NextRequest) {
 
     // Extract text based on file type
     let resumeText = "";
-    if (file.type === "text/plain") {
-      resumeText = await file.text();
+    
+    try {
+      if (file.type === "text/plain") {
+        resumeText = await file.text();
+      } else if (file.type === "application/pdf" || file.name.toLowerCase().endsWith('.pdf')) {
+        // PDF parsing temporarily disabled for production build
+        return NextResponse.json({
+          success: false,
+          error: "PDF parsing is coming soon. Please upload a TXT file or paste your resume content directly.",
+          extractedData: getEmptyData(),
+          confidence: 0
+        }, { headers: getSecurityHeaders() });
+      } else if (
+        file.type === "application/msword" || 
+        file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
+        file.name.toLowerCase().endsWith('.doc') ||
+        file.name.toLowerCase().endsWith('.docx')
+      ) {
+        // DOC/DOCX parsing temporarily disabled for production build
+        return NextResponse.json({
+          success: false,
+          error: "DOC/DOCX parsing is coming soon. Please upload a TXT file or paste your resume content directly.",
+          extractedData: getEmptyData(),
+          confidence: 0
+        }, { headers: getSecurityHeaders() });
+      } else {
+        return NextResponse.json({
+          success: false,
+          error: "Unsupported file type. Please use PDF, DOC, DOCX, or TXT files.",
+          extractedData: getEmptyData(),
+          confidence: 0
+        }, { headers: getSecurityHeaders() });
+      }
+      
+      // Common validation for all file types
+      if (!resumeText || resumeText.trim().length === 0) {
+        return NextResponse.json({
+          success: false,
+          error: "Could not extract text from the file. Please ensure it contains readable text.",
+          extractedData: getEmptyData(),
+          confidence: 0
+        }, { headers: getSecurityHeaders() });
+      }
       
       // Check for suspicious content
       if (containsInjectionAttempt(resumeText)) {
@@ -149,11 +188,11 @@ export async function POST(request: NextRequest) {
       if (resumeText.length > 50000) {
         resumeText = resumeText.substring(0, 50000);
       }
-    } else {
-      // For other file types, return a message about implementation
+    } catch (error) {
+      console.error("Error extracting text from file:", error);
       return NextResponse.json({
         success: false,
-        error: "PDF/DOC parsing coming soon. Please use a TXT file for now.",
+        error: "Failed to extract text from the file. Please try a different format or ensure the file is not corrupted.",
         extractedData: getEmptyData(),
         confidence: 0
       }, { headers: getSecurityHeaders() });

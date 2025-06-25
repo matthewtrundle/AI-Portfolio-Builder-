@@ -1,7 +1,6 @@
 import { NextAuthOptions } from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
 import EmailProvider from "next-auth/providers/email";
-import GoogleProvider from "next-auth/providers/google";
 import { sql } from "@vercel/postgres";
 import bcrypt from "bcryptjs";
 
@@ -17,11 +16,6 @@ export const authOptions: NextAuthOptions = {
         },
       },
       from: process.env.EMAIL_FROM || "noreply@aiportfoliobuilder.com",
-    }),
-    
-    GoogleProvider({
-      clientId: process.env.GOOGLE_CLIENT_ID!,
-      clientSecret: process.env.GOOGLE_CLIENT_SECRET!,
     }),
     
     CredentialsProvider({
@@ -91,7 +85,7 @@ export const authOptions: NextAuthOptions = {
     },
     
     async signIn({ user, account, profile }) {
-      if (account?.provider === "google" || account?.provider === "email") {
+      if (account?.provider === "email") {
         try {
           // Check if user exists
           const { rows } = await sql`
@@ -102,14 +96,7 @@ export const authOptions: NextAuthOptions = {
             // Create new user
             await sql`
               INSERT INTO users (email, name, image, email_verified)
-              VALUES (${user.email}, ${user.name}, ${user.image}, ${account.provider === "google" ? new Date().toISOString() : null})
-            `;
-          } else if (account.provider === "google" && !rows[0].email_verified) {
-            // Verify email if signing in with Google
-            await sql`
-              UPDATE users 
-              SET email_verified = ${new Date().toISOString()}, name = ${user.name}, image = ${user.image}
-              WHERE email = ${user.email}
+              VALUES (${user.email}, ${user.name}, ${user.image}, null)
             `;
           }
           

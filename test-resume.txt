@@ -1,0 +1,25 @@
+John Doe
+Software Engineer
+john.doe@email.com
+San Francisco, CA
+
+Professional Summary:
+Experienced software engineer with 5 years of experience in full-stack development. 
+Specialized in React, Node.js, and cloud technologies.
+
+Experience:
+Senior Software Engineer - Tech Corp (2021-Present)
+- Led development of microservices architecture
+- Implemented CI/CD pipelines
+- Mentored junior developers
+
+Software Engineer - StartupXYZ (2019-2021)  
+- Built RESTful APIs using Node.js
+- Developed responsive web applications with React
+- Worked with PostgreSQL and MongoDB databases
+
+Skills:
+JavaScript, TypeScript, React, Node.js, Python, AWS, Docker, Git
+
+Education:
+BS Computer Science - University of California (2019)
