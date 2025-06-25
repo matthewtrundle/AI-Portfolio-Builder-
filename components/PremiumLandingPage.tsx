@@ -6,8 +6,6 @@ import Link from "next/link";
 import Image from "next/image";
 import HeroImageSection from "./HeroImageSection";
 import FeatureImageGrid from "./FeatureImageGrid";
-import TransformationShowcase from "./TransformationShowcase";
-import AnimatedStats from "./AnimatedStats";
 import ScrollProgress from "./ScrollProgress";
 import FloatingCTA from "./FloatingCTA";
 import EvolutionTimeline from "./EvolutionTimeline";
@@ -35,39 +33,9 @@ import {
   ArrowUpRight,
 } from "lucide-react";
 
-// Custom hook for number animation
-function useCountUp(end: number, duration: number = 2000) {
-  const [count, setCount] = useState(0);
-  const countRef = useRef(0);
-  const startTime = useRef(Date.now());
-
-  useEffect(() => {
-    const animate = () => {
-      const now = Date.now();
-      const progress = Math.min((now - startTime.current) / duration, 1);
-      
-      const easeOutQuart = 1 - Math.pow(1 - progress, 4);
-      const currentCount = Math.floor(easeOutQuart * end);
-      
-      if (currentCount !== countRef.current) {
-        countRef.current = currentCount;
-        setCount(currentCount);
-      }
-
-      if (progress < 1) {
-        requestAnimationFrame(animate);
-      }
-    };
-
-    requestAnimationFrame(animate);
-  }, [end, duration]);
-
-  return count;
-}
 
 export default function PremiumLandingPage() {
   const [billingCycle, setBillingCycle] = useState<"monthly" | "annual">("monthly");
-  const [activeTestimonial, setActiveTestimonial] = useState(0);
   const { scrollY } = useScroll();
   
   // Parallax transforms
@@ -172,11 +140,23 @@ export default function PremiumLandingPage() {
 
       {/* Hero Section with Premium Design */}
       <section className="relative min-h-screen flex items-center justify-center pt-20">
-        {/* Animated gradient background */}
-        <div className="absolute inset-0 bg-gradient-to-br from-blue-50 via-white to-purple-50">
-          <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob" />
-          <div className="absolute top-0 -right-4 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-2000" />
-          <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-20 animate-blob animation-delay-4000" />
+        {/* Hero background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/biff01_Soft_focus_background_of_modern_office_space_with_plan_14e31197-aced-43ca-b87a-4f48f219b97d_0.png"
+            alt="Modern workspace"
+            fill
+            className="object-cover opacity-10"
+            priority
+          />
+          <div className="absolute inset-0 bg-gradient-to-br from-blue-50/90 via-white/90 to-purple-50/90" />
+        </div>
+        
+        {/* Animated gradient overlay */}
+        <div className="absolute inset-0">
+          <div className="absolute top-0 -left-4 w-96 h-96 bg-purple-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob" />
+          <div className="absolute top-0 -right-4 w-96 h-96 bg-blue-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-2000" />
+          <div className="absolute -bottom-8 left-20 w-96 h-96 bg-pink-300 rounded-full mix-blend-multiply filter blur-3xl opacity-10 animate-blob animation-delay-4000" />
         </div>
 
         <motion.div 
@@ -184,21 +164,7 @@ export default function PremiumLandingPage() {
           style={{ y: heroY, opacity: heroOpacity }}
         >
           <div className="max-w-5xl mx-auto text-center">
-            {/* Live activity badge */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.6 }}
-              className="inline-flex items-center gap-3 bg-gradient-to-r from-green-50 to-emerald-50 border border-green-200 rounded-full px-4 py-2 mb-8"
-            >
-              <span className="relative flex h-2 w-2">
-                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-green-400 opacity-75" />
-                <span className="relative inline-flex rounded-full h-2 w-2 bg-green-500" />
-              </span>
-              <span className="text-sm font-medium text-gray-700">
-                {recentActivity[0].name} from {recentActivity[0].location} just created a portfolio
-              </span>
-            </motion.div>
+            {/* Removed live activity badge */}
 
             {/* Main headline with typing effect */}
             <motion.h1
@@ -284,9 +250,6 @@ export default function PremiumLandingPage() {
           <HeroImageSection />
         </div>
       </section>
-
-      {/* Animated Stats */}
-      <AnimatedStats />
 
       {/* Evolution Timeline */}
       <EvolutionTimeline />
@@ -495,9 +458,6 @@ export default function PremiumLandingPage() {
         </div>
       </section>
 
-      {/* Transformation Showcase */}
-      <TransformationShowcase />
-
       {/* Features with Images */}
       <section className="py-24 bg-white">
         <div className="container mx-auto px-4">
@@ -516,64 +476,6 @@ export default function PremiumLandingPage() {
             </p>
           </motion.div>
           <FeatureImageGrid />
-        </div>
-      </section>
-
-      {/* Social Proof Section */}
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-6xl mx-auto"
-          >
-
-            {/* Testimonials Carousel */}
-            <div className="relative">
-              <AnimatePresence mode="wait">
-                <motion.div
-                  key={activeTestimonial}
-                  initial={{ opacity: 0, y: 20 }}
-                  animate={{ opacity: 1, y: 0 }}
-                  exit={{ opacity: 0, y: -20 }}
-                  className="bg-gradient-to-br from-blue-50 to-purple-50 rounded-3xl p-12 text-center"
-                >
-                  <div className="flex justify-center mb-6">
-                    {[...Array(5)].map((_, i) => (
-                      <Star key={i} className="w-6 h-6 text-yellow-400 fill-current" />
-                    ))}
-                  </div>
-                  <p className="text-2xl text-gray-800 mb-8 leading-relaxed max-w-4xl mx-auto">
-                    "{testimonials[activeTestimonial].quote}"
-                  </p>
-                  <div>
-                    <p className="font-semibold text-lg">
-                      {testimonials[activeTestimonial].name}
-                    </p>
-                    <p className="text-gray-600">
-                      {testimonials[activeTestimonial].role}
-                    </p>
-                  </div>
-                </motion.div>
-              </AnimatePresence>
-
-              {/* Testimonial indicators */}
-              <div className="flex justify-center gap-2 mt-8">
-                {testimonials.map((_, index) => (
-                  <button
-                    key={index}
-                    onClick={() => setActiveTestimonial(index)}
-                    className={`w-2 h-2 rounded-full transition-all duration-300 ${
-                      index === activeTestimonial
-                        ? "w-8 bg-blue-600"
-                        : "bg-gray-300 hover:bg-gray-400"
-                    }`}
-                  />
-                ))}
-              </div>
-            </div>
-          </motion.div>
         </div>
       </section>
 
@@ -660,21 +562,3 @@ export default function PremiumLandingPage() {
   );
 }
 
-// Sample testimonials data
-const testimonials = [
-  {
-    quote: "I went from 0 responses to 5 interviews in 2 weeks. The portfolio shows what I can actually do, not just keywords. Game changer!",
-    name: "Sarah Chen",
-    role: "Senior Data Scientist at Meta",
-  },
-  {
-    quote: "After 6 months of applying with no luck, I built my portfolio and got 3 offers within a month. The analytics showed me what worked.",
-    name: "Michael Torres",
-    role: "ML Engineer at Google",
-  },
-  {
-    quote: "The AI understood my experience better than I could explain it myself. My portfolio got me interviews at companies I thought were out of reach.",
-    name: "Jessica Liu",
-    role: "Director of Analytics at Stripe",
-  },
-];
