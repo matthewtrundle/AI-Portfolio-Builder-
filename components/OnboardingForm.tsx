@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { motion } from "framer-motion";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
@@ -16,9 +16,52 @@ import {
   Trash2,
   ChevronRight,
   CheckCircle,
+  AlertCircle,
 } from "lucide-react";
 
-// Form schema
+// Step-specific schemas for validation
+const step0Schema = z.object({
+  name: z.string().min(2, "Name must be at least 2 characters"),
+  title: z.string().min(2, "Professional title is required"),
+  email: z.string().email("Please enter a valid email address"),
+  location: z.string().min(2, "Location is required"),
+  linkedin: z.string().url("Please enter a valid LinkedIn URL").optional().or(z.literal("")),
+  github: z.string().optional(),
+  headshot: z.string().optional(),
+});
+
+const step1Schema = z.object({
+  currentRole: z.string().min(10, "Please provide at least 10 characters describing your role"),
+  yearsExperience: z.string().min(1, "Please select your years of experience"),
+  keyAchievement: z.string().min(10, "Please share a key achievement (min 10 characters)"),
+});
+
+const step2Schema = z.object({
+  experiences: z.array(z.object({
+    company: z.string().min(1, "Company name is required"),
+    role: z.string().min(1, "Role is required"),
+    duration: z.string().min(1, "Duration is required"),
+    achievements: z.array(z.string()),
+  })).min(1, "Please add at least one experience"),
+});
+
+const step3Schema = z.object({
+  projects: z.array(z.object({
+    name: z.string(),
+    description: z.string(),
+    technologies: z.array(z.string()),
+    impact: z.string(),
+    link: z.string().optional(),
+  })).optional(),
+  technicalSkills: z.array(z.string()).min(3, "Please add at least 3 technical skills"),
+});
+
+const step4Schema = z.object({
+  targetRoles: z.array(z.string()).min(1, "Please add at least one target role"),
+  uniqueValue: z.string().min(20, "Please provide at least 20 characters about what makes you unique"),
+});
+
+// Full form schema
 const portfolioSchema = z.object({
   // Basic Information
   name: z.string().min(2, "Name is required"),
@@ -75,6 +118,8 @@ interface OnboardingFormProps {
 export default function OnboardingForm({ onSubmit, initialData }: OnboardingFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
+  const [stepErrors, setStepErrors] = useState<Record<number, string[]>>({});
+  const [touchedFields, setTouchedFields] = useState<Set<string>>(new Set());
   
   console.log("OnboardingForm received initialData:", initialData);
 
@@ -85,8 +130,11 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
     watch,
     setValue,
     getValues,
+    trigger,
+    clearErrors,
   } = useForm<PortfolioFormData>({
     resolver: zodResolver(portfolioSchema),
+    mode: "onChange",
     defaultValues: {
       name: initialData?.name || "",
       title: initialData?.title || "",
@@ -107,12 +155,116 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
   });
 
   const steps = [
-    { title: "Basic Information", icon: User },
-    { title: "Professional Summary", icon: Briefcase },
-    { title: "Experience", icon: Trophy },
-    { title: "Projects & Skills", icon: Code2 },
-    { title: "Target & Goals", icon: Target },
+    { title: "Basic Information", icon: User, schema: step0Schema },
+    { title: "Professional Summary", icon: Briefcase, schema: step1Schema },
+    { title: "Experience", icon: Trophy, schema: step2Schema },
+    { title: "Projects & Skills", icon: Code2, schema: step3Schema },
+    { title: "Target & Goals", icon: Target, schema: step4Schema },
   ];
+
+  // Validate current step
+  const validateCurrentStep = async () => {
+    const stepFieldMappings: Record<number, string[]> = {
+      0: ['name', 'title', 'email', 'location', 'linkedin', 'github', 'headshot'],
+      1: ['currentRole', 'yearsExperience', 'keyAchievement'],
+      2: ['experiences'],
+      3: ['projects', 'technicalSkills'],
+      4: ['targetRoles', 'uniqueValue']
+    };
+
+    const fieldsToValidate = stepFieldMappings[currentStep];
+    const isValid = await trigger(fieldsToValidate as any);
+    
+    // Get current step errors
+    const currentStepErrors: string[] = [];
+    fieldsToValidate.forEach(field => {
+      if (errors[field as keyof typeof errors]) {
+        currentStepErrors.push(field);
+      }
+    });
+    
+    setStepErrors(prev => ({ ...prev, [currentStep]: currentStepErrors }));
+    return isValid;
+  };
+
+  // Check if current step has all required fields filled
+  const isStepComplete = () => {
+    const values = getValues();
+    
+    switch (currentStep) {
+      case 0:
+        return values.name && values.title && values.email && values.location;
+      case 1:
+        return values.currentRole && values.yearsExperience && values.keyAchievement;
+      case 2:
+        return values.experiences?.length > 0 && 
+               values.experiences.every(exp => exp.company && exp.role && exp.duration);
+      case 3:
+        return values.technicalSkills?.length >= 3;
+      case 4:
+        return values.targetRoles?.length > 0 && values.uniqueValue;
+      default:
+        return false;
+    }
+  };
+
+  // Mark field as touched
+  const markFieldTouched = (fieldName: string) => {
+    setTouchedFields(prev => new Set(prev).add(fieldName));
+  };
+
+  // Check if field should show error
+  const shouldShowError = (fieldName: string) => {
+    return touchedFields.has(fieldName) && errors[fieldName as keyof typeof errors];
+  };
+
+  // Get all validation errors for final submission
+  const getAllValidationErrors = () => {
+    const allErrors: { step: number; field: string; message: string }[] = [];
+    
+    // Step 0 errors
+    if (!getValues('name')) allErrors.push({ step: 0, field: 'name', message: 'Full name is required' });
+    if (!getValues('title')) allErrors.push({ step: 0, field: 'title', message: 'Professional title is required' });
+    if (!getValues('email')) allErrors.push({ step: 0, field: 'email', message: 'Email is required' });
+    if (!getValues('location')) allErrors.push({ step: 0, field: 'location', message: 'Location is required' });
+    
+    // Step 1 errors
+    if (!getValues('currentRole') || getValues('currentRole').length < 10) 
+      allErrors.push({ step: 1, field: 'currentRole', message: 'Current role description is required (min 10 characters)' });
+    if (!getValues('yearsExperience')) 
+      allErrors.push({ step: 1, field: 'yearsExperience', message: 'Years of experience is required' });
+    if (!getValues('keyAchievement') || getValues('keyAchievement').length < 10) 
+      allErrors.push({ step: 1, field: 'keyAchievement', message: 'Key achievement is required (min 10 characters)' });
+    
+    // Step 2 errors
+    const experiences = getValues('experiences') || [];
+    if (experiences.length === 0) {
+      allErrors.push({ step: 2, field: 'experiences', message: 'At least one experience is required' });
+    } else {
+      experiences.forEach((exp, index) => {
+        if (!exp.company) allErrors.push({ step: 2, field: `experience-${index}`, message: `Company name is required for experience #${index + 1}` });
+        if (!exp.role) allErrors.push({ step: 2, field: `experience-${index}`, message: `Role is required for experience #${index + 1}` });
+        if (!exp.duration) allErrors.push({ step: 2, field: `experience-${index}`, message: `Duration is required for experience #${index + 1}` });
+      });
+    }
+    
+    // Step 3 errors
+    const technicalSkills = getValues('technicalSkills') || [];
+    if (technicalSkills.length < 3) {
+      allErrors.push({ step: 3, field: 'technicalSkills', message: 'At least 3 technical skills are required' });
+    }
+    
+    // Step 4 errors
+    const targetRoles = getValues('targetRoles') || [];
+    if (targetRoles.length === 0) {
+      allErrors.push({ step: 4, field: 'targetRoles', message: 'At least one target role is required' });
+    }
+    if (!getValues('uniqueValue') || getValues('uniqueValue').length < 20) {
+      allErrors.push({ step: 4, field: 'uniqueValue', message: 'Unique value proposition is required (min 20 characters)' });
+    }
+    
+    return allErrors;
+  };
 
   const onFormSubmit = async (data: PortfolioFormData) => {
     setIsGenerating(true);
@@ -148,8 +300,9 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
     }
   };
 
-  const nextStep = () => {
-    if (currentStep < steps.length - 1) {
+  const nextStep = async () => {
+    const isValid = await validateCurrentStep();
+    if (isValid && currentStep < steps.length - 1) {
       setCurrentStep(currentStep + 1);
     }
   };
@@ -225,58 +378,102 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Full Name *
+                    Full Name <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    {...register("name")}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                    placeholder="Matthew Rundle"
-                  />
-                  {errors.name && (
-                    <p className="text-red-500 text-sm mt-1">{errors.name.message}</p>
+                  <div className="relative">
+                    <input
+                      {...register("name")}
+                      onBlur={() => markFieldTouched('name')}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                        shouldShowError('name') ? 'border-red-500' : ''
+                      }`}
+                      placeholder="Matthew Rundle"
+                    />
+                    {shouldShowError('name') && (
+                      <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                    )}
+                  </div>
+                  {shouldShowError('name') && (
+                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.name?.message}
+                    </p>
                   )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Professional Title *
+                    Professional Title <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    {...register("title")}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                    placeholder="Data Science & AI Leader"
-                  />
-                  {errors.title && (
-                    <p className="text-red-500 text-sm mt-1">{errors.title.message}</p>
+                  <div className="relative">
+                    <input
+                      {...register("title")}
+                      onBlur={() => markFieldTouched('title')}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                        shouldShowError('title') ? 'border-red-500' : ''
+                      }`}
+                      placeholder="Data Science & AI Leader"
+                    />
+                    {shouldShowError('title') && (
+                      <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                    )}
+                  </div>
+                  {shouldShowError('title') && (
+                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.title?.message}
+                    </p>
                   )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Email *
+                    Email <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    {...register("email")}
-                    type="email"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                    placeholder="your@email.com"
-                  />
-                  {errors.email && (
-                    <p className="text-red-500 text-sm mt-1">{errors.email.message}</p>
+                  <div className="relative">
+                    <input
+                      {...register("email")}
+                      type="email"
+                      onBlur={() => markFieldTouched('email')}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                        shouldShowError('email') ? 'border-red-500' : ''
+                      }`}
+                      placeholder="your@email.com"
+                    />
+                    {shouldShowError('email') && (
+                      <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                    )}
+                  </div>
+                  {shouldShowError('email') && (
+                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.email?.message}
+                    </p>
                   )}
                 </div>
 
                 <div>
                   <label className="block text-sm font-medium text-gray-700 mb-2">
-                    Location *
+                    Location <span className="text-red-500">*</span>
                   </label>
-                  <input
-                    {...register("location")}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                    placeholder="Austin, TX"
-                  />
-                  {errors.location && (
-                    <p className="text-red-500 text-sm mt-1">{errors.location.message}</p>
+                  <div className="relative">
+                    <input
+                      {...register("location")}
+                      onBlur={() => markFieldTouched('location')}
+                      className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                        shouldShowError('location') ? 'border-red-500' : ''
+                      }`}
+                      placeholder="Austin, TX"
+                    />
+                    {shouldShowError('location') && (
+                      <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                    )}
+                  </div>
+                  {shouldShowError('location') && (
+                    <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                      <AlertCircle className="w-3 h-3" />
+                      {errors.location?.message}
+                    </p>
                   )}
                 </div>
 
@@ -312,47 +509,83 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Current Role & Responsibilities *
+                  Current Role & Responsibilities <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  {...register("currentRole")}
-                  rows={4}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  placeholder="Describe your current role, key responsibilities, and the impact you're making..."
-                />
-                {errors.currentRole && (
-                  <p className="text-red-500 text-sm mt-1">{errors.currentRole.message}</p>
+                <div className="relative">
+                  <textarea
+                    {...register("currentRole")}
+                    onBlur={() => markFieldTouched('currentRole')}
+                    rows={4}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                      shouldShowError('currentRole') ? 'border-red-500' : ''
+                    }`}
+                    placeholder="Describe your current role, key responsibilities, and the impact you're making..."
+                  />
+                  {shouldShowError('currentRole') && (
+                    <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                  )}
+                </div>
+                {shouldShowError('currentRole') && (
+                  <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.currentRole?.message}
+                  </p>
                 )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Years of Experience *
+                  Years of Experience <span className="text-red-500">*</span>
                 </label>
-                <select
-                  {...register("yearsExperience")}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                >
-                  <option value="">Select years</option>
-                  <option value="0-2">0-2 years</option>
-                  <option value="3-5">3-5 years</option>
-                  <option value="6-10">6-10 years</option>
-                  <option value="10+">10+ years</option>
-                </select>
+                <div className="relative">
+                  <select
+                    {...register("yearsExperience")}
+                    onBlur={() => markFieldTouched('yearsExperience')}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                      shouldShowError('yearsExperience') ? 'border-red-500' : ''
+                    }`}
+                  >
+                    <option value="">Select years</option>
+                    <option value="0-2">0-2 years</option>
+                    <option value="3-5">3-5 years</option>
+                    <option value="6-10">6-10 years</option>
+                    <option value="10+">10+ years</option>
+                  </select>
+                  {shouldShowError('yearsExperience') && (
+                    <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                  )}
+                </div>
+                {shouldShowError('yearsExperience') && (
+                  <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.yearsExperience?.message}
+                  </p>
+                )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  Key Achievement *
+                  Key Achievement <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  {...register("keyAchievement")}
-                  rows={3}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  placeholder="Share your proudest professional achievement with metrics (e.g., Led $200M transformation, Built system processing 1M+ requests)"
-                />
-                {errors.keyAchievement && (
-                  <p className="text-red-500 text-sm mt-1">{errors.keyAchievement.message}</p>
+                <div className="relative">
+                  <textarea
+                    {...register("keyAchievement")}
+                    onBlur={() => markFieldTouched('keyAchievement')}
+                    rows={3}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                      shouldShowError('keyAchievement') ? 'border-red-500' : ''
+                    }`}
+                    placeholder="Share your proudest professional achievement with metrics (e.g., Led $200M transformation, Built system processing 1M+ requests)"
+                  />
+                  {shouldShowError('keyAchievement') && (
+                    <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                  )}
+                </div>
+                {shouldShowError('keyAchievement') && (
+                  <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.keyAchievement?.message}
+                  </p>
                 )}
               </div>
             </div>
@@ -384,35 +617,59 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Company *
+                        Company <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        {...register(`experiences.${index}.company`)}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                        placeholder="Expedia Group"
-                      />
+                      <div className="relative">
+                        <input
+                          {...register(`experiences.${index}.company`)}
+                          onBlur={() => markFieldTouched(`experiences.${index}.company`)}
+                          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                            errors.experiences?.[index]?.company ? 'border-red-500' : ''
+                          }`}
+                          placeholder="Expedia Group"
+                        />
+                        {errors.experiences?.[index]?.company && (
+                          <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                        )}
+                      </div>
                     </div>
 
                     <div>
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Role *
+                        Role <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        {...register(`experiences.${index}.role`)}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                        placeholder="Director of Analytics"
-                      />
+                      <div className="relative">
+                        <input
+                          {...register(`experiences.${index}.role`)}
+                          onBlur={() => markFieldTouched(`experiences.${index}.role`)}
+                          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                            errors.experiences?.[index]?.role ? 'border-red-500' : ''
+                          }`}
+                          placeholder="Director of Analytics"
+                        />
+                        {errors.experiences?.[index]?.role && (
+                          <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                        )}
+                      </div>
                     </div>
 
                     <div className="md:col-span-2">
                       <label className="block text-sm font-medium text-gray-700 mb-2">
-                        Duration *
+                        Duration <span className="text-red-500">*</span>
                       </label>
-                      <input
-                        {...register(`experiences.${index}.duration`)}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                        placeholder="Jan 2020 - Present"
-                      />
+                      <div className="relative">
+                        <input
+                          {...register(`experiences.${index}.duration`)}
+                          onBlur={() => markFieldTouched(`experiences.${index}.duration`)}
+                          className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                            errors.experiences?.[index]?.duration ? 'border-red-500' : ''
+                          }`}
+                          placeholder="Jan 2020 - Present"
+                        />
+                        {errors.experiences?.[index]?.duration && (
+                          <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                        )}
+                      </div>
                     </div>
 
                     <div className="md:col-span-2">
@@ -501,7 +758,7 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
                     <div className="grid grid-cols-1 gap-4">
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Project Name *
+                          Project Name
                         </label>
                         <input
                           {...register(`projects.${index}.name`)}
@@ -512,7 +769,7 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Description *
+                          Description
                         </label>
                         <textarea
                           {...register(`projects.${index}.description`)}
@@ -540,7 +797,7 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
 
                       <div>
                         <label className="block text-sm font-medium text-gray-700 mb-2">
-                          Impact/Results *
+                          Impact/Results
                         </label>
                         <input
                           {...register(`projects.${index}.impact`)}
@@ -589,22 +846,32 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               <div>
                 <h3 className="text-xl font-semibold mb-4">Technical Skills</h3>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  List your technical skills (one per line) *
+                  List your technical skills (one per line) <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  rows={6}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  placeholder="Python\nMachine Learning\nTensorFlow/PyTorch\nSQL\nData Visualization\nNLP"
-                  onChange={(e) => {
-                    setValue(
-                      "technicalSkills",
-                      e.target.value.split("\n").filter((s) => s.trim())
-                    );
-                  }}
-                />
-                {errors.technicalSkills && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.technicalSkills.message}
+                <div className="relative">
+                  <textarea
+                    rows={6}
+                    onBlur={() => markFieldTouched('technicalSkills')}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                      shouldShowError('technicalSkills') ? 'border-red-500' : ''
+                    }`}
+                    placeholder="Python\nMachine Learning\nTensorFlow/PyTorch\nSQL\nData Visualization\nNLP"
+                    onChange={(e) => {
+                      setValue(
+                        "technicalSkills",
+                        e.target.value.split("\n").filter((s) => s.trim())
+                      );
+                    }}
+                    defaultValue={watch('technicalSkills')?.join('\n') || ''}
+                  />
+                  {shouldShowError('technicalSkills') && (
+                    <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                  )}
+                </div>
+                {shouldShowError('technicalSkills') && (
+                  <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.technicalSkills?.message}
                   </p>
                 )}
               </div>
@@ -619,45 +886,64 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               <div>
                 <h3 className="text-lg font-semibold mb-4">Target Roles</h3>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  What roles are you targeting? (one per line) *
+                  What roles are you targeting? (one per line) <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  rows={4}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  placeholder="Senior Data Scientist\nAI/ML Engineering Manager\nDirector of Data Science\nPrincipal ML Engineer"
-                  onChange={(e) => {
-                    setValue(
-                      "targetRoles",
-                      e.target.value.split("\n").filter((s) => s.trim())
-                    );
-                  }}
-                />
-                {errors.targetRoles && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.targetRoles.message}
+                <div className="relative">
+                  <textarea
+                    rows={4}
+                    onBlur={() => markFieldTouched('targetRoles')}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                      shouldShowError('targetRoles') ? 'border-red-500' : ''
+                    }`}
+                    placeholder="Senior Data Scientist\nAI/ML Engineering Manager\nDirector of Data Science\nPrincipal ML Engineer"
+                    onChange={(e) => {
+                      setValue(
+                        "targetRoles",
+                        e.target.value.split("\n").filter((s) => s.trim())
+                      );
+                    }}
+                    defaultValue={watch('targetRoles')?.join('\n') || ''}
+                  />
+                  {shouldShowError('targetRoles') && (
+                    <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                  )}
+                </div>
+                {shouldShowError('targetRoles') && (
+                  <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.targetRoles?.message}
                   </p>
                 )}
               </div>
 
               <div>
                 <label className="block text-sm font-medium text-gray-700 mb-2">
-                  What makes you unique? *
+                  What makes you unique? <span className="text-red-500">*</span>
                 </label>
-                <textarea
-                  {...register("uniqueValue")}
-                  rows={4}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
-                  placeholder="Describe your unique combination of skills, experience, and perspective that sets you apart (e.g., 'Blend of deep technical ML expertise with proven business leadership, having built and scaled data teams that delivered $100M+ impact')"
-                />
-                {errors.uniqueValue && (
-                  <p className="text-red-500 text-sm mt-1">
-                    {errors.uniqueValue.message}
+                <div className="relative">
+                  <textarea
+                    {...register("uniqueValue")}
+                    onBlur={() => markFieldTouched('uniqueValue')}
+                    rows={4}
+                    className={`w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white ${
+                      shouldShowError('uniqueValue') ? 'border-red-500' : ''
+                    }`}
+                    placeholder="Describe your unique combination of skills, experience, and perspective that sets you apart (e.g., 'Blend of deep technical ML expertise with proven business leadership, having built and scaled data teams that delivered $100M+ impact')"
+                  />
+                  {shouldShowError('uniqueValue') && (
+                    <AlertCircle className="absolute right-3 top-3 w-5 h-5 text-red-500" />
+                  )}
+                </div>
+                {shouldShowError('uniqueValue') && (
+                  <p className="text-red-500 text-sm mt-1 flex items-center gap-1">
+                    <AlertCircle className="w-3 h-3" />
+                    {errors.uniqueValue?.message}
                   </p>
                 )}
               </div>
 
               <div className="bg-blue-50 border border-blue-200 rounded-lg p-4">
-                <h4 className="font-semibold text-blue-900 mb-2">🎯 Ready to Generate!</h4>
+                <h4 className="font-semibold text-blue-900 mb-2">Ready to Generate!</h4>
                 <p className="text-blue-800">
                   We'll use AI to create a compelling portfolio based on your information.
                   You'll be able to preview and edit everything before deploying.
@@ -685,7 +971,12 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               <button
                 type="button"
                 onClick={nextStep}
-                className="px-6 py-2 bg-blue-600 text-white rounded-lg hover:bg-blue-700 flex items-center gap-2"
+                disabled={!isStepComplete()}
+                className={`px-6 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                  isStepComplete()
+                    ? 'bg-blue-600 text-white hover:bg-blue-700'
+                    : 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                }`}
               >
                 Next
                 <ChevronRight className="w-4 h-4" />
@@ -693,8 +984,12 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
             ) : (
               <button
                 type="submit"
-                disabled={isGenerating}
-                className="px-6 py-2 bg-green-600 text-white rounded-lg hover:bg-green-700 flex items-center gap-2 disabled:opacity-50"
+                disabled={isGenerating || !isStepComplete()}
+                className={`px-6 py-2 rounded-lg flex items-center gap-2 transition-all ${
+                  isGenerating || !isStepComplete()
+                    ? 'bg-gray-300 text-gray-500 cursor-not-allowed'
+                    : 'bg-green-600 text-white hover:bg-green-700'
+                }`}
               >
                 {isGenerating ? (
                   <>
@@ -712,6 +1007,82 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
           </div>
         </motion.div>
       </form>
+
+      {/* Validation Summary for Generate Button */}
+      {currentStep === steps.length - 1 && !isStepComplete() && (
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          className="mt-4 bg-red-50 border border-red-200 rounded-lg p-4"
+        >
+          <div className="flex items-start gap-3">
+            <AlertCircle className="w-5 h-5 text-red-600 flex-shrink-0 mt-0.5" />
+            <div>
+              <p className="font-medium text-red-900">
+                Please complete all required fields before generating
+              </p>
+              <ul className="text-sm text-red-700 mt-2 space-y-1">
+                {!getValues('targetRoles')?.length && (
+                  <li>• Add at least one target role</li>
+                )}
+                {(!getValues('uniqueValue') || getValues('uniqueValue').length < 20) && (
+                  <li>• Describe what makes you unique (min 20 characters)</li>
+                )}
+              </ul>
+            </div>
+          </div>
+        </motion.div>
+      )}
+
+      {/* Full Form Validation Summary (when on last step) */}
+      {currentStep === steps.length - 1 && (
+        <motion.div
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          className="mt-6"
+        >
+          {(() => {
+            const allErrors = getAllValidationErrors();
+            const errorsByStep = allErrors.reduce((acc, error) => {
+              if (!acc[error.step]) acc[error.step] = [];
+              acc[error.step].push(error);
+              return acc;
+            }, {} as Record<number, typeof allErrors>);
+
+            if (Object.keys(errorsByStep).length > 0) {
+              return (
+                <div className="bg-yellow-50 border border-yellow-200 rounded-lg p-4">
+                  <div className="flex items-start gap-3">
+                    <AlertCircle className="w-5 h-5 text-yellow-600 flex-shrink-0 mt-0.5" />
+                    <div className="w-full">
+                      <p className="font-medium text-yellow-900 mb-3">
+                        Complete all required fields to generate your portfolio
+                      </p>
+                      {Object.entries(errorsByStep).map(([stepIndex, errors]) => (
+                        <div key={stepIndex} className="mb-3">
+                          <button
+                            onClick={() => setCurrentStep(Number(stepIndex))}
+                            className="text-sm font-medium text-yellow-800 hover:text-yellow-900 flex items-center gap-1 mb-1"
+                          >
+                            <steps[Number(stepIndex)].icon className="w-4 h-4" />
+                            {steps[Number(stepIndex)].title}
+                          </button>
+                          <ul className="text-sm text-yellow-700 ml-5 space-y-0.5">
+                            {errors.map((error, idx) => (
+                              <li key={idx}>• {error.message}</li>
+                            ))}
+                          </ul>
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                </div>
+              );
+            }
+            return null;
+          })()}
+        </motion.div>
+      )}
     </div>
   );
 }
