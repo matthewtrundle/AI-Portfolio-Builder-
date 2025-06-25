@@ -10,6 +10,7 @@ export interface Portfolio {
   portfolio_data: any;
   generated_code?: string;
   view_count: number;
+  edit_count: number;
   created_at?: Date;
   updated_at?: Date;
 }
@@ -97,33 +98,49 @@ export async function updatePortfolio(
   pin: string,
   data: any,
   generatedCode?: string
-): Promise<boolean> {
+): Promise<{ success: boolean; error?: string; remainingEdits?: number }> {
   try {
-    // First verify the PIN
+    // First verify the PIN and check edit count
     const { rows } = await sql`
-      SELECT pin_hash FROM portfolios WHERE slug = ${slug}
+      SELECT pin_hash, edit_count FROM portfolios WHERE slug = ${slug}
     `;
     
-    if (rows.length === 0) return false;
-    
-    if (!verifyPin(pin, rows[0].pin_hash)) {
-      return false;
+    if (rows.length === 0) {
+      return { success: false, error: 'Portfolio not found' };
     }
     
-    // Update the portfolio
+    if (!verifyPin(pin, rows[0].pin_hash)) {
+      return { success: false, error: 'Invalid PIN' };
+    }
+    
+    // Check if edit limit reached
+    const currentEditCount = rows[0].edit_count || 0;
+    if (currentEditCount >= 5) {
+      return { 
+        success: false, 
+        error: 'Edit limit reached. Maximum 5 edits allowed per portfolio.',
+        remainingEdits: 0
+      };
+    }
+    
+    // Update the portfolio and increment edit count
     await sql`
       UPDATE portfolios 
       SET 
         portfolio_data = ${JSON.stringify(data)},
         generated_code = ${generatedCode},
+        edit_count = edit_count + 1,
         updated_at = CURRENT_TIMESTAMP
       WHERE slug = ${slug}
     `;
     
-    return true;
+    return { 
+      success: true, 
+      remainingEdits: 4 - currentEditCount 
+    };
   } catch (error) {
     console.error('Error updating portfolio:', error);
-    return false;
+    return { success: false, error: 'Failed to update portfolio' };
   }
 }
 
@@ -157,7 +174,7 @@ export async function deletePortfolio(slug: string, pin: string): Promise<boolea
 export async function getPortfoliosByEmail(email: string): Promise<Portfolio[]> {
   try {
     const { rows } = await sql`
-      SELECT slug, name, created_at, view_count 
+      SELECT slug, name, created_at, view_count, edit_count 
       FROM portfolios 
       WHERE email = ${email}
       ORDER BY created_at DESC
@@ -167,5 +184,44 @@ export async function getPortfoliosByEmail(email: string): Promise<Portfolio[]> 
   } catch (error) {
     console.error('Error fetching portfolios:', error);
     return [];
+  }
+}
+
+// Get user's total edit statistics
+export async function getUserEditStats(email: string): Promise<{
+  totalEdits: number;
+  totalRemainingEdits: number;
+  portfoliosCount: number;
+}> {
+  try {
+    const { rows } = await sql`
+      SELECT 
+        COUNT(*) as portfolios_count,
+        COALESCE(SUM(edit_count), 0) as total_edits,
+        COALESCE(SUM(5 - LEAST(edit_count, 5)), 0) as total_remaining_edits
+      FROM portfolios 
+      WHERE email = ${email}
+    `;
+    
+    if (rows.length === 0) {
+      return {
+        totalEdits: 0,
+        totalRemainingEdits: 0,
+        portfoliosCount: 0
+      };
+    }
+    
+    return {
+      totalEdits: parseInt(rows[0].total_edits),
+      totalRemainingEdits: parseInt(rows[0].total_remaining_edits),
+      portfoliosCount: parseInt(rows[0].portfolios_count)
+    };
+  } catch (error) {
+    console.error('Error fetching user edit stats:', error);
+    return {
+      totalEdits: 0,
+      totalRemainingEdits: 0,
+      portfoliosCount: 0
+    };
   }
 }

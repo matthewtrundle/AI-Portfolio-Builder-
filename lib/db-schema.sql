@@ -8,6 +8,7 @@ CREATE TABLE IF NOT EXISTS portfolios (
   portfolio_data JSONB NOT NULL,
   generated_code TEXT,
   view_count INTEGER DEFAULT 0,
+  edit_count INTEGER DEFAULT 0,
   created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
   updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
 );

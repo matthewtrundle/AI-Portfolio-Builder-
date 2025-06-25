@@ -24,8 +24,16 @@ export async function POST(
 
     // Don't send the PIN hash to the client
     const { pin_hash, ...portfolioData } = portfolio;
+    
+    // Add remaining edits information
+    const editCount = portfolio.edit_count || 0;
+    const remainingEdits = Math.max(0, 5 - editCount);
 
-    return NextResponse.json(portfolioData);
+    return NextResponse.json({
+      ...portfolioData,
+      remainingEdits,
+      maxEdits: 5
+    });
   } catch (error) {
     console.error("Verification error:", error);
     return NextResponse.json(

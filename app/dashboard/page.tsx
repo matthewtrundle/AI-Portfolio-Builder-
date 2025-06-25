@@ -18,6 +18,7 @@ import {
   Users,
   Clock,
   ExternalLink,
+  User,
 } from "lucide-react";
 
 interface Portfolio {
@@ -26,6 +27,7 @@ interface Portfolio {
   name: string;
   created_at: string;
   view_count: number;
+  edit_count?: number;
   is_public: boolean;
 }
 
@@ -93,6 +95,13 @@ export default function DashboardPage() {
               </Link>
               <Link href="/templates" className="text-gray-600 hover:text-gray-900">
                 Templates
+              </Link>
+              <Link 
+                href="/profile" 
+                className="flex items-center gap-2 px-3 py-1.5 text-gray-600 hover:text-gray-900 hover:bg-gray-100 rounded-lg transition-colors"
+              >
+                <User className="w-4 h-4" />
+                Profile
               </Link>
               <button className="text-gray-600 hover:text-gray-900">
                 Sign Out
@@ -242,6 +251,12 @@ export default function DashboardPage() {
                       <span>{portfolio.view_count} views</span>
                     </div>
                     <div className="flex items-center gap-2">
+                      <Edit3 className="w-4 h-4" />
+                      <span>
+                        {5 - (portfolio.edit_count || 0)} edits remaining
+                      </span>
+                    </div>
+                    <div className="flex items-center gap-2">
                       <Clock className="w-4 h-4" />
                       <span>
                         Created {new Date(portfolio.created_at).toLocaleDateString()}
@@ -286,6 +301,10 @@ export default function DashboardPage() {
                       <span className="flex items-center gap-1">
                         <Eye className="w-4 h-4" />
                         {portfolio.view_count} views
+                      </span>
+                      <span className="flex items-center gap-1">
+                        <Edit3 className="w-4 h-4" />
+                        {5 - (portfolio.edit_count || 0)} edits left
                       </span>
                       <span className="flex items-center gap-1">
                         <Clock className="w-4 h-4" />

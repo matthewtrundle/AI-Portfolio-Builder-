@@ -1,5 +1,23 @@
 import { NextRequest, NextResponse } from "next/server";
 import { deletePortfolio, updatePortfolio } from "@/lib/db";
+import { getServerSession } from "next-auth";
+import { authOptions } from "@/lib/auth";
+import { sql } from "@vercel/postgres";
+
+// Helper function to check if user owns the portfolio
+async function checkPortfolioOwnership(slug: string, userEmail: string): Promise<boolean> {
+  try {
+    const { rows } = await sql`
+      SELECT email FROM portfolios WHERE slug = ${slug}
+    `;
+    
+    if (rows.length === 0) return false;
+    return rows[0].email === userEmail;
+  } catch (error) {
+    console.error("Error checking portfolio ownership:", error);
+    return false;
+  }
+}
 
 // DELETE portfolio
 export async function DELETE(
@@ -11,6 +29,18 @@ export async function DELETE(
 
     if (!pin) {
       return NextResponse.json({ error: "PIN required" }, { status: 400 });
+    }
+
+    // Optional: Check if user is authenticated and owns the portfolio
+    const session = await getServerSession(authOptions);
+    if (session?.user?.email) {
+      const isOwner = await checkPortfolioOwnership(params.slug, session.user.email);
+      if (!isOwner) {
+        return NextResponse.json(
+          { error: "You don't have permission to delete this portfolio" },
+          { status: 403 }
+        );
+      }
     }
 
     const success = await deletePortfolio(params.slug, pin);
@@ -32,7 +62,7 @@ export async function DELETE(
   }
 }
 
-// UPDATE portfolio (for future use)
+// UPDATE portfolio
 export async function PUT(
   request: NextRequest,
   { params }: { params: { slug: string } }
@@ -47,16 +77,31 @@ export async function PUT(
       );
     }
 
-    const success = await updatePortfolio(params.slug, pin, data, generatedCode);
+    // Optional: Check if user is authenticated and owns the portfolio
+    const session = await getServerSession(authOptions);
+    if (session?.user?.email) {
+      const isOwner = await checkPortfolioOwnership(params.slug, session.user.email);
+      if (!isOwner) {
+        return NextResponse.json(
+          { error: "You don't have permission to edit this portfolio" },
+          { status: 403 }
+        );
+      }
+    }
 
-    if (!success) {
+    const result = await updatePortfolio(params.slug, pin, data, generatedCode);
+
+    if (!result.success) {
       return NextResponse.json(
-        { error: "Invalid PIN or portfolio not found" },
-        { status: 401 }
+        { error: result.error || "Failed to update portfolio", remainingEdits: result.remainingEdits },
+        { status: result.error === "Invalid PIN" ? 401 : 400 }
       );
     }
 
-    return NextResponse.json({ success: true });
+    return NextResponse.json({ 
+      success: true, 
+      remainingEdits: result.remainingEdits 
+    });
   } catch (error) {
     console.error("Update error:", error);
     return NextResponse.json(

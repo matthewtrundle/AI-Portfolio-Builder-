@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { Lock, Trash2, Save, ChevronLeft } from "lucide-react";
+import { Lock, Trash2, Save, ChevronLeft, Edit3, AlertCircle, CheckCircle } from "lucide-react";
 
 interface EditPageProps {
   params: { slug: string };
@@ -15,6 +15,8 @@ export default function EditPage({ params }: EditPageProps) {
   const [isVerified, setIsVerified] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const [portfolioData, setPortfolioData] = useState<any>(null);
+  const [remainingEdits, setRemainingEdits] = useState<number>(0);
+  const [isSaving, setIsSaving] = useState(false);
 
   const verifyPin = async () => {
     setIsLoading(true);
@@ -28,6 +30,7 @@ export default function EditPage({ params }: EditPageProps) {
       if (response.ok) {
         const data = await response.json();
         setPortfolioData(data);
+        setRemainingEdits(data.remainingEdits || 0);
         setIsVerified(true);
       } else {
         alert("Invalid PIN. Please try again.");
@@ -127,6 +130,45 @@ export default function EditPage({ params }: EditPageProps) {
           </div>
 
           <div className="bg-white rounded-lg shadow-sm p-8">
+            {/* Edit Count Alert */}
+            <div className={`mb-6 p-4 rounded-lg flex items-start gap-3 ${
+              remainingEdits === 0
+                ? "bg-red-50 border border-red-200"
+                : remainingEdits <= 2
+                ? "bg-orange-50 border border-orange-200"
+                : "bg-green-50 border border-green-200"
+            }`}>
+              {remainingEdits === 0 ? (
+                <AlertCircle className="w-5 h-5 text-red-600 mt-0.5" />
+              ) : (
+                <Edit3 className="w-5 h-5 text-green-600 mt-0.5" />
+              )}
+              <div className="flex-1">
+                <p className={`font-medium ${
+                  remainingEdits === 0
+                    ? "text-red-900"
+                    : remainingEdits <= 2
+                    ? "text-orange-900"
+                    : "text-green-900"
+                }`}>
+                  {remainingEdits === 0
+                    ? "No edits remaining"
+                    : `${remainingEdits} edit${remainingEdits === 1 ? '' : 's'} remaining`}
+                </p>
+                <p className={`text-sm mt-1 ${
+                  remainingEdits === 0
+                    ? "text-red-700"
+                    : remainingEdits <= 2
+                    ? "text-orange-700"
+                    : "text-green-700"
+                }`}>
+                  {remainingEdits === 0
+                    ? "You've used all 5 edits for this portfolio. Create a new portfolio to make more changes."
+                    : "Each portfolio can be edited up to 5 times. Use your edits wisely!"}
+                </p>
+              </div>
+            </div>
+
             <p className="text-gray-600 mb-6">
               Portfolio editing interface coming soon. For now, you can delete your portfolio if needed.
             </p>
