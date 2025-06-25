@@ -224,12 +224,12 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Full Name *
                   </label>
                   <input
                     {...register("name")}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="Matthew Rundle"
                   />
                   {errors.name && (
@@ -238,12 +238,12 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Professional Title *
                   </label>
                   <input
                     {...register("title")}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="Data Science & AI Leader"
                   />
                   {errors.title && (
@@ -252,13 +252,13 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Email *
                   </label>
                   <input
                     {...register("email")}
                     type="email"
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="your@email.com"
                   />
                   {errors.email && (
@@ -267,12 +267,12 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     Location *
                   </label>
                   <input
                     {...register("location")}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="Austin, TX"
                   />
                   {errors.location && (
@@ -281,23 +281,23 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     LinkedIn URL
                   </label>
                   <input
                     {...register("linkedin")}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="https://linkedin.com/in/yourprofile"
                   />
                 </div>
 
                 <div>
-                  <label className="block text-sm font-medium mb-2">
+                  <label className="block text-sm font-medium text-gray-700 mb-2">
                     GitHub Username
                   </label>
                   <input
                     {...register("github")}
-                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                    className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                     placeholder="githubusername"
                   />
                 </div>
@@ -311,13 +311,13 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               <h2 className="text-2xl font-bold mb-6">Tell us about your experience</h2>
               
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Current Role & Responsibilities *
                 </label>
                 <textarea
                   {...register("currentRole")}
                   rows={4}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="Describe your current role, key responsibilities, and the impact you're making..."
                 />
                 {errors.currentRole && (
@@ -326,12 +326,12 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Years of Experience *
                 </label>
                 <select
                   {...register("yearsExperience")}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                 >
                   <option value="">Select years</option>
                   <option value="0-2">0-2 years</option>
@@ -342,13 +342,13 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   Key Achievement *
                 </label>
                 <textarea
                   {...register("keyAchievement")}
                   rows={3}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="Share your proudest professional achievement with metrics (e.g., Led $200M transformation, Built system processing 1M+ requests)"
                 />
                 {errors.keyAchievement && (
@@ -383,47 +383,47 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
 
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Company *
                       </label>
                       <input
                         {...register(`experiences.${index}.company`)}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                         placeholder="Expedia Group"
                       />
                     </div>
 
                     <div>
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Role *
                       </label>
                       <input
                         {...register(`experiences.${index}.role`)}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                         placeholder="Director of Analytics"
                       />
                     </div>
 
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Duration *
                       </label>
                       <input
                         {...register(`experiences.${index}.duration`)}
-                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                        className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                         placeholder="Jan 2020 - Present"
                       />
                     </div>
 
                     <div className="md:col-span-2">
-                      <label className="block text-sm font-medium mb-2">
+                      <label className="block text-sm font-medium text-gray-700 mb-2">
                         Key Achievements
                       </label>
                       {watch(`experiences.${index}.achievements`)?.map((_, achIndex) => (
                         <div key={achIndex} className="flex gap-2 mb-2">
                           <input
                             {...register(`experiences.${index}.achievements.${achIndex}`)}
-                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                            className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                             placeholder="Describe a key achievement with metrics"
                           />
                           <button
@@ -500,35 +500,35 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
 
                     <div className="grid grid-cols-1 gap-4">
                       <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Project Name *
                         </label>
                         <input
                           {...register(`projects.${index}.name`)}
-                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                           placeholder="Multi-Agent AI System"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Description *
                         </label>
                         <textarea
                           {...register(`projects.${index}.description`)}
                           rows={3}
-                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                           placeholder="Describe what you built and why"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Technologies Used
                         </label>
                         <input
                           placeholder="Python, TensorFlow, OpenAI, React (comma separated)"
-                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                           onChange={(e) => {
                             setValue(
                               `projects.${index}.technologies`,
@@ -539,23 +539,23 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Impact/Results *
                         </label>
                         <input
                           {...register(`projects.${index}.impact`)}
-                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                           placeholder="e.g., Improved efficiency by 40%, Processed 1M+ requests"
                         />
                       </div>
 
                       <div>
-                        <label className="block text-sm font-medium mb-2">
+                        <label className="block text-sm font-medium text-gray-700 mb-2">
                           Project Link (optional)
                         </label>
                         <input
                           {...register(`projects.${index}.link`)}
-                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                          className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                           placeholder="https://github.com/username/project"
                         />
                       </div>
@@ -588,12 +588,12 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               {/* Technical Skills */}
               <div>
                 <h3 className="text-xl font-semibold mb-4">Technical Skills</h3>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   List your technical skills (one per line) *
                 </label>
                 <textarea
                   rows={6}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="Python\nMachine Learning\nTensorFlow/PyTorch\nSQL\nData Visualization\nNLP"
                   onChange={(e) => {
                     setValue(
@@ -618,12 +618,12 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               
               <div>
                 <h3 className="text-lg font-semibold mb-4">Target Roles</h3>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   What roles are you targeting? (one per line) *
                 </label>
                 <textarea
                   rows={4}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="Senior Data Scientist\nAI/ML Engineering Manager\nDirector of Data Science\nPrincipal ML Engineer"
                   onChange={(e) => {
                     setValue(
@@ -640,13 +640,13 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
               </div>
 
               <div>
-                <label className="block text-sm font-medium mb-2">
+                <label className="block text-sm font-medium text-gray-700 mb-2">
                   What makes you unique? *
                 </label>
                 <textarea
                   {...register("uniqueValue")}
                   rows={4}
-                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500"
+                  className="w-full px-4 py-2 border rounded-lg focus:ring-2 focus:ring-blue-500 text-gray-900 bg-white"
                   placeholder="Describe your unique combination of skills, experience, and perspective that sets you apart (e.g., 'Blend of deep technical ML expertise with proven business leadership, having built and scaled data teams that delivered $100M+ impact')"
                 />
                 {errors.uniqueValue && (
