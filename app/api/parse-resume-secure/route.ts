@@ -212,17 +212,41 @@ export async function POST(request: NextRequest) {
     // Create secure prompt for parsing
     const prompt = `Parse this resume and extract ONLY factual information. 
 Do not generate or infer any information not explicitly stated.
-Extract: name, email, title, location, current role description, years of experience, key achievement, job experiences, projects, skills, and potential target roles.
+
+Return a JSON object with these exact fields:
+{
+  "name": "full name",
+  "email": "email address",
+  "title": "current professional title",
+  "location": "city, state/country",
+  "currentRole": "description of current role",
+  "yearsExperience": "0-2" or "3-5" or "6-10" or "10+",
+  "keyAchievement": "most significant achievement",
+  "linkedin": "LinkedIn URL if present",
+  "github": "GitHub URL if present",
+  "experiences": [
+    {
+      "company": "company name",
+      "role": "job title",
+      "duration": "date range",
+      "achievements": ["achievement 1", "achievement 2"]
+    }
+  ],
+  "projects": ["project 1", "project 2"],
+  "technicalSkills": ["skill 1", "skill 2"],
+  "targetRoles": ["potential role 1", "potential role 2"]
+}
 
 Important:
-- Only extract what is explicitly written
-- Do not include any personal information like SSN, passport numbers, or financial data
-- Keep all content professional and appropriate
+- Only extract what is explicitly written in the resume
+- Use empty strings "" for missing fields
+- Use empty arrays [] for missing lists
+- Do not include personal information like SSN or financial data
 
 Resume text:
-${resumeText.substring(0, 10000)} // Limit context to prevent token abuse
+${resumeText.substring(0, 10000)}
 
-Return ONLY a JSON object with the extracted fields. No additional text.`;
+Return ONLY the JSON object. No additional text or explanation.`;
 
     // Call OpenRouter API with constraints
     const response = await fetch("https://openrouter.ai/api/v1/chat/completions", {
@@ -269,6 +293,9 @@ Return ONLY a JSON object with the extracted fields. No additional text.`;
 
     // Sanitize all extracted data
     const sanitizedData = sanitizeExtractedData(extractedData);
+    
+    console.log("AI extracted data:", extractedData);
+    console.log("Sanitized data:", sanitizedData);
 
     // Calculate confidence
     const confidence = calculateConfidence(sanitizedData);
@@ -302,7 +329,7 @@ function sanitizeExtractedData(data: any): any {
   
   // Sanitize string fields
   const stringFields = ['name', 'email', 'title', 'location', 'currentRole', 
-                       'yearsExperience', 'keyAchievement', 'uniqueValue'];
+                       'yearsExperience', 'keyAchievement', 'uniqueValue', 'linkedin', 'github'];
   
   for (const field of stringFields) {
     if (data[field] && typeof data[field] === 'string') {

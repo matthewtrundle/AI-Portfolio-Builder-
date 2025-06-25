@@ -162,6 +162,7 @@ export default function AppPage() {
           {step === "upload" && (
             <ResumeUpload
               onDataExtracted={(data) => {
+                console.log("Resume data received in app page:", data);
                 setResumeData(data);
                 setStep("onboarding");
               }}

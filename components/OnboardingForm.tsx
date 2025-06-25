@@ -75,6 +75,8 @@ interface OnboardingFormProps {
 export default function OnboardingForm({ onSubmit, initialData }: OnboardingFormProps) {
   const [currentStep, setCurrentStep] = useState(0);
   const [isGenerating, setIsGenerating] = useState(false);
+  
+  console.log("OnboardingForm received initialData:", initialData);
 
   const {
     register,

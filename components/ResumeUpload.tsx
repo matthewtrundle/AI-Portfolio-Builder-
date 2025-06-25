@@ -133,6 +133,7 @@ export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadPr
       const data = await response.json();
 
       if (data.success && data.extractedData) {
+        console.log("Extracted data from API:", data.extractedData);
         setExtractedData(data.extractedData);
         setParseStatus(data.confidence > 0.8 ? "success" : "partial");
         setParseProgress({ stage: "Complete!", progress: 100 });
@@ -144,6 +145,7 @@ export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadPr
             headshot: headshotPreview,
             headshotFile: headshot
           };
+          console.log("Data being passed to onDataExtracted:", dataWithHeadshot);
           onDataExtracted(dataWithHeadshot);
         }, 1500);
       } else {
