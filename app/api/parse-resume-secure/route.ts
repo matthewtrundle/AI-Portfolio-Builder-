@@ -10,6 +10,8 @@ import {
   containsSensitiveInfo,
   sanitizeInput
 } from "@/lib/security-guardrails";
+import pdf from "pdf-parse";
+import mammoth from "mammoth";
 
 // Helper function to check file signatures
 function isValidFileSignature(buffer: ArrayBuffer, fileName: string): boolean {
