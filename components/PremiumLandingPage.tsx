@@ -3,6 +3,10 @@
 import { useState, useEffect, useRef } from "react";
 import { motion, useScroll, useTransform, AnimatePresence } from "framer-motion";
 import Link from "next/link";
+import Image from "next/image";
+import HeroImageSection from "./HeroImageSection";
+import FeatureImageGrid from "./FeatureImageGrid";
+import TransformationShowcase from "./TransformationShowcase";
 import {
   Sparkles,
   TrendingUp,
@@ -274,6 +278,13 @@ export default function PremiumLandingPage() {
         </motion.div>
       </section>
 
+      {/* Hero Image Section */}
+      <section className="py-12 bg-gradient-to-b from-white to-gray-50">
+        <div className="container mx-auto px-4">
+          <HeroImageSection />
+        </div>
+      </section>
+
       {/* Problem Agitation with Premium Cards */}
       <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
@@ -377,6 +388,31 @@ export default function PremiumLandingPage() {
                 </div>
               </motion.div>
             </div>
+
+            {/* Visual comparison */}
+            <motion.div
+              initial={{ opacity: 0, y: 20 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ delay: 0.3 }}
+              className="mt-16 relative h-96 rounded-2xl overflow-hidden shadow-2xl"
+            >
+              <Image
+                src="/images/biff01_A_split_composition_showing_a_stressed_job_seeker_on_t_79fcc99d-6a5d-464d-80df-b5fd75648ad2_2.png"
+                alt="Before and after portfolio transformation"
+                fill
+                className="object-cover"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/20 to-transparent" />
+              <div className="absolute bottom-8 left-8 right-8">
+                <p className="text-white text-2xl font-bold mb-2">
+                  Stop competing on keywords. Start connecting with humans.
+                </p>
+                <p className="text-gray-200">
+                  Your portfolio tells your story in a way resumes never could.
+                </p>
+              </div>
+            </motion.div>
           </motion.div>
         </div>
       </section>
@@ -453,6 +489,30 @@ export default function PremiumLandingPage() {
         </div>
       </section>
 
+      {/* Transformation Showcase */}
+      <TransformationShowcase />
+
+      {/* Features with Images */}
+      <section className="py-24 bg-white">
+        <div className="container mx-auto px-4">
+          <motion.div
+            initial={{ opacity: 0, y: 20 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            transition={{ duration: 0.6 }}
+            viewport={{ once: true }}
+            className="text-center mb-12"
+          >
+            <h2 className="text-4xl md:text-5xl font-bold mb-4 bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
+              Everything You Need to Get Hired
+            </h2>
+            <p className="text-xl text-gray-600 max-w-2xl mx-auto">
+              Professional tools that turn your experience into opportunities
+            </p>
+          </motion.div>
+          <FeatureImageGrid />
+        </div>
+      </section>
+
       {/* Social Proof Section */}
       <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
@@ -513,19 +573,29 @@ export default function PremiumLandingPage() {
 
 
       {/* Final CTA */}
-      <section className="py-24 bg-gradient-to-br from-blue-600 to-purple-600 text-white relative overflow-hidden">
-        <div className="absolute inset-0 bg-gradient-to-r from-blue-600/20 to-purple-600/20" />
+      <section className="py-24 relative overflow-hidden">
+        {/* Background image */}
+        <div className="absolute inset-0">
+          <Image
+            src="/images/biff01_Triptych_composition_showing_three_different_tech_prof_ae7601d9-5877-4f8e-a402-b5ff271578ad_3.png"
+            alt="Successful professionals"
+            fill
+            className="object-cover"
+          />
+          <div className="absolute inset-0 bg-gradient-to-r from-blue-900/95 to-purple-900/95" />
+        </div>
+        
         <motion.div
           initial={{ opacity: 0 }}
           whileInView={{ opacity: 1 }}
           viewport={{ once: true }}
           className="container mx-auto px-4 relative z-10"
         >
-          <div className="max-w-4xl mx-auto text-center">
+          <div className="max-w-4xl mx-auto text-center text-white">
             <h2 className="text-4xl md:text-5xl font-bold mb-6">
               Ready to Get 3x More Interviews?
             </h2>
-            <p className="text-xl mb-8 opacity-90">
+            <p className="text-xl mb-8 text-gray-100">
               Stop waiting for ATS algorithms to notice you.
             </p>
             
