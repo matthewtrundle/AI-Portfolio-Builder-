@@ -153,72 +153,123 @@ export default function PremiumLandingPage() {
           className="container mx-auto px-4 relative z-10"
           style={{ y: heroY, opacity: heroOpacity }}
         >
-          <div className="max-w-5xl mx-auto text-center">
-            {/* Removed live activity badge */}
-
-            {/* Main headline with typing effect */}
-            <motion.h1
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8"
-            >
-              <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
-                Your Story Deserves
-              </span>
-              <br />
-              <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
-                More Than a Resume
-              </span>
-            </motion.h1>
-
-            <motion.p
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed"
-            >
-              Welcome to the evolution of professional storytelling. Share your projects,{" "}
-              <span className="font-semibold text-gray-900">showcase your journey</span>, and connect authentically.
-            </motion.p>
-
-            {/* CTA buttons with hover effects */}
-            <motion.div
-              initial={{ opacity: 0, y: 20 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
-            >
-              <Link
-                href="/app"
-                className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1"
+          <div className="grid lg:grid-cols-2 gap-12 items-center max-w-7xl mx-auto">
+            {/* Left side - Text content */}
+            <div className="text-center lg:text-left">
+              {/* Main headline with typing effect */}
+              <motion.h1
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.2 }}
+                className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8"
               >
-                <span className="relative z-10 flex items-center justify-center gap-2">
-                  Begin Your Story
-                  <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
+                  Your Story Deserves
                 </span>
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
-              </Link>
-            </motion.div>
+                <br />
+                <span className="bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+                  More Than a Resume
+                </span>
+              </motion.h1>
 
-            {/* Trust indicators with animation */}
+              <motion.p
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.4 }}
+                className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto lg:mx-0 leading-relaxed"
+              >
+                Welcome to the evolution of professional storytelling. Share your projects,{" "}
+                <span className="font-semibold text-gray-900">showcase your journey</span>, and connect authentically.
+              </motion.p>
+
+              {/* CTA buttons with hover effects */}
+              <motion.div
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.8, delay: 0.6 }}
+                className="flex flex-col sm:flex-row gap-4 justify-center lg:justify-start mb-16"
+              >
+                <Link
+                  href="/app"
+                  className="group relative px-8 py-4 bg-gradient-to-r from-blue-600 to-blue-700 text-white rounded-full font-semibold text-lg overflow-hidden transition-all duration-300 hover:shadow-2xl hover:-translate-y-1 inline-block"
+                >
+                  <span className="relative z-10 flex items-center justify-center gap-2">
+                    Begin Your Story
+                    <ArrowRight className="w-5 h-5 group-hover:translate-x-1 transition-transform" />
+                  </span>
+                  <div className="absolute inset-0 bg-gradient-to-r from-blue-700 to-purple-700 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
+                </Link>
+              </motion.div>
+
+              {/* Trust indicators with animation */}
+              <motion.div
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 1, delay: 0.8 }}
+                className="flex flex-wrap items-center justify-center lg:justify-start gap-8 text-sm"
+              >
+                <div className="flex items-center gap-2">
+                  <CheckCircle className="w-5 h-5 text-green-500" />
+                  <span className="text-gray-600">Free to start your journey</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Shield className="w-5 h-5 text-blue-500" />
+                  <span className="text-gray-600">Your story, protected</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <Clock className="w-5 h-5 text-purple-500" />
+                  <span className="text-gray-600">Begin in minutes</span>
+                </div>
+              </motion.div>
+            </div>
+
+            {/* Right side - Resume preview */}
             <motion.div
-              initial={{ opacity: 0 }}
-              animate={{ opacity: 1 }}
-              transition={{ duration: 1, delay: 0.8 }}
-              className="flex flex-wrap items-center justify-center gap-8 text-sm"
+              initial={{ opacity: 0, x: 20 }}
+              animate={{ opacity: 1, x: 0 }}
+              transition={{ duration: 0.8, delay: 0.4 }}
+              className="relative hidden lg:block"
             >
-              <div className="flex items-center gap-2">
-                <CheckCircle className="w-5 h-5 text-green-500" />
-                <span className="text-gray-600">Free to start your journey</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Shield className="w-5 h-5 text-blue-500" />
-                <span className="text-gray-600">Your story, protected</span>
-              </div>
-              <div className="flex items-center gap-2">
-                <Clock className="w-5 h-5 text-purple-500" />
-                <span className="text-gray-600">Begin in minutes</span>
+              <div className="relative">
+                {/* Decorative elements */}
+                <div className="absolute -inset-4 bg-gradient-to-r from-blue-500 to-purple-500 rounded-3xl blur-2xl opacity-20 animate-pulse" />
+                <div className="absolute -inset-1 bg-gradient-to-r from-blue-500 to-purple-500 rounded-2xl opacity-75" />
+                
+                {/* Resume image */}
+                <div className="relative bg-white rounded-xl overflow-hidden shadow-2xl">
+                  <Image
+                    src="/images/Resume.png"
+                    alt="Portfolio example"
+                    width={600}
+                    height={800}
+                    className="w-full h-auto"
+                    priority
+                  />
+                  
+                  {/* Overlay with "Example" badge */}
+                  <div className="absolute top-4 right-4 bg-blue-600 text-white px-3 py-1 rounded-full text-sm font-semibold shadow-lg">
+                    Live Example
+                  </div>
+                </div>
+                
+                {/* Floating feature badges */}
+                <motion.div
+                  className="absolute -left-4 top-20 bg-white rounded-lg shadow-xl p-3 flex items-center gap-2"
+                  animate={{ y: [0, -10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity }}
+                >
+                  <Eye className="w-5 h-5 text-blue-600" />
+                  <span className="text-sm font-semibold">Interactive</span>
+                </motion.div>
+                
+                <motion.div
+                  className="absolute -right-4 bottom-20 bg-white rounded-lg shadow-xl p-3 flex items-center gap-2"
+                  animate={{ y: [0, 10, 0] }}
+                  transition={{ duration: 3, repeat: Infinity, delay: 1.5 }}
+                >
+                  <Zap className="w-5 h-5 text-purple-600" />
+                  <span className="text-sm font-semibold">AI-Powered</span>
+                </motion.div>
               </div>
             </motion.div>
           </div>
