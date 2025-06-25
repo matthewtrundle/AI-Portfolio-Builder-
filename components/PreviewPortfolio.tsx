@@ -36,7 +36,7 @@ export default function PreviewPortfolio({
   const [isGenerating, setIsGenerating] = useState(true);
   const [copied, setCopied] = useState(false);
   const [copiedLink, setCopiedLink] = useState(false);
-  const portfolioUrl = data?.url || "";
+  const portfolioUrl = data?.url || `${process.env.NEXT_PUBLIC_SITE_URL || 'https://ai-portfolio-builder-nine.vercel.app'}/p/${data?.slug || 'preview'}`;
   const pin = data?.pin || "";
 
   // Simulate AI generation
@@ -201,13 +201,26 @@ export default function PreviewPortfolio({
                 </p>
               </div>
 
-              {/* Mock Portfolio Preview */}
+              {/* Portfolio Preview */}
               <div className="border rounded-lg overflow-hidden">
-                <iframe
-                  src={`data:text/html;charset=utf-8,<html><body style='font-family: system-ui; padding: 40px; background: #f8fafc;'><h1 style='color: #1e293b; margin-bottom: 10px;'>${encodeURIComponent(data.name)}</h1><p style='color: #64748b; font-size: 20px; margin-bottom: 30px;'>${encodeURIComponent(data.title)}</p><div style='background: white; padding: 30px; border-radius: 8px; box-shadow: 0 1px 3px rgba(0,0,0,0.1);'><h2 style='color: #1e293b; margin-bottom: 20px;'>About</h2><p style='color: #475569; line-height: 1.6;'>${encodeURIComponent(data.currentRole)}</p><p style='color: #475569; line-height: 1.6; margin-top: 10px;'><strong>Key Achievement:</strong> ${encodeURIComponent(data.keyAchievement)}</p></div></body></html>`}
-                  className="w-full h-[600px] bg-white"
-                  title="Portfolio Preview"
-                />
+                {generatedCode ? (
+                  <iframe
+                    srcDoc={generatedCode}
+                    className="w-full h-[600px] bg-white"
+                    title="Portfolio Preview"
+                    sandbox="allow-scripts allow-same-origin"
+                  />
+                ) : portfolioUrl ? (
+                  <iframe
+                    src={portfolioUrl}
+                    className="w-full h-[600px] bg-white"
+                    title="Portfolio Preview"
+                  />
+                ) : (
+                  <div className="w-full h-[600px] bg-gray-50 flex items-center justify-center">
+                    <p className="text-gray-500">Portfolio preview not available</p>
+                  </div>
+                )}
               </div>
 
               {/* Action Buttons */}
