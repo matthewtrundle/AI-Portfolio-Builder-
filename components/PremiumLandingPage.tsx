@@ -247,16 +247,16 @@ export default function PremiumLandingPage() {
       </section>
 
       {/* Problem Agitation with Premium Cards */}
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+      <section className="py-32 bg-gradient-to-b from-gray-50 to-white">
         <div className="container mx-auto px-4">
           <motion.div
             initial={{ opacity: 0 }}
             whileInView={{ opacity: 1 }}
             viewport={{ once: true }}
-            className="max-w-4xl mx-auto"
+            className="max-w-6xl mx-auto"
           >
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
+            <div className="text-center mb-20">
+              <h2 className="text-4xl md:text-5xl font-bold mb-6">
                 <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                   The World Has Changed
                 </span>
@@ -266,7 +266,7 @@ export default function PremiumLandingPage() {
               </p>
             </div>
 
-            <div className="grid md:grid-cols-2 gap-8">
+            <div className="grid lg:grid-cols-2 gap-12">
               {/* Traditional Resume Card */}
               <motion.div
                 initial={{ opacity: 0, x: -20 }}
@@ -275,20 +275,20 @@ export default function PremiumLandingPage() {
                 className="relative group"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-red-100 to-orange-100 rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
-                <div className="relative bg-white border border-red-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="p-3 bg-red-100 rounded-xl">
+                <div className="relative bg-white border border-red-200 rounded-2xl p-10 hover:shadow-2xl transition-all duration-300">
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="p-4 bg-red-100 rounded-xl">
                       <XCircle className="w-8 h-8 text-red-600" />
                     </div>
-                    <h3 className="text-2xl font-bold">Yesterday's Format</h3>
+                    <h3 className="text-2xl font-bold text-gray-900">Yesterday's Format</h3>
                   </div>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {[
-                      { stat: "Text", desc: "Limited to words on a page" },
-                      { stat: "Keywords", desc: "Reduced to searchable terms" },
-                      { stat: "One-way", desc: "No interaction or engagement" },
-                      { stat: "Past", desc: "Focus on where you've been" },
+                      { label: "Text Only", desc: "Limited to words on a page" },
+                      { label: "Keywords", desc: "Reduced to searchable terms" },
+                      { label: "One-way", desc: "No interaction or engagement" },
+                      { label: "Past Focus", desc: "Shows where you've been" },
                     ].map((item, index) => (
                       <motion.div
                         key={index}
@@ -296,12 +296,12 @@ export default function PremiumLandingPage() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1 }}
-                        className="flex items-center gap-4"
+                        className="flex flex-col space-y-1"
                       >
-                        <span className="text-3xl font-bold text-red-600 w-20">
-                          {item.stat}
+                        <span className="text-lg font-semibold text-red-600">
+                          {item.label}
                         </span>
-                        <span className="text-gray-700">{item.desc}</span>
+                        <span className="text-gray-600 leading-relaxed">{item.desc}</span>
                       </motion.div>
                     ))}
                   </div>
@@ -316,20 +316,20 @@ export default function PremiumLandingPage() {
                 className="relative group"
               >
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-purple-100 rounded-2xl blur-xl opacity-50 group-hover:opacity-70 transition-opacity" />
-                <div className="relative bg-white border border-blue-200 rounded-2xl p-8 hover:shadow-2xl transition-all duration-300">
-                  <div className="flex items-center gap-3 mb-6">
-                    <div className="p-3 bg-blue-100 rounded-xl">
+                <div className="relative bg-white border border-blue-200 rounded-2xl p-10 hover:shadow-2xl transition-all duration-300">
+                  <div className="flex items-center gap-4 mb-8">
+                    <div className="p-4 bg-blue-100 rounded-xl">
                       <CheckCircle className="w-8 h-8 text-blue-600" />
                     </div>
-                    <h3 className="text-2xl font-bold">Tomorrow's Portfolio</h3>
+                    <h3 className="text-2xl font-bold text-gray-900">Tomorrow's Portfolio</h3>
                   </div>
                   
-                  <div className="space-y-4">
+                  <div className="space-y-6">
                     {[
-                      { stat: "Rich", desc: "Videos, projects, and stories" },
-                      { stat: "Human", desc: "Personality shines through" },
-                      { stat: "Interactive", desc: "Engage with your work" },
-                      { stat: "Future", desc: "Shows what you can do" },
+                      { label: "Rich Media", desc: "Videos, projects, and stories" },
+                      { label: "Human", desc: "Personality shines through" },
+                      { label: "Interactive", desc: "Engage with your work" },
+                      { label: "Future Ready", desc: "Shows what you can do" },
                     ].map((item, index) => (
                       <motion.div
                         key={index}
@@ -337,12 +337,12 @@ export default function PremiumLandingPage() {
                         whileInView={{ opacity: 1, x: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: index * 0.1 }}
-                        className="flex items-center gap-4"
+                        className="flex flex-col space-y-1"
                       >
-                        <span className="text-3xl font-bold text-blue-600 w-20">
-                          {item.stat}
+                        <span className="text-lg font-semibold text-blue-600">
+                          {item.label}
                         </span>
-                        <span className="text-gray-700">{item.desc}</span>
+                        <span className="text-gray-600 leading-relaxed">{item.desc}</span>
                       </motion.div>
                     ))}
                   </div>
@@ -356,7 +356,7 @@ export default function PremiumLandingPage() {
               whileInView={{ opacity: 1, y: 0 }}
               viewport={{ once: true }}
               transition={{ delay: 0.3 }}
-              className="mt-16 relative h-96 rounded-2xl overflow-hidden shadow-2xl"
+              className="mt-20 relative h-96 rounded-2xl overflow-hidden shadow-2xl"
             >
               <Image
                 src="/images/biff01_A_split_composition_showing_a_stressed_job_seeker_on_t_79fcc99d-6a5d-464d-80df-b5fd75648ad2_2.png"
