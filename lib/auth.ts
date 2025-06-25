@@ -30,6 +30,12 @@ export const authOptions: NextAuthOptions = {
         }
         
         try {
+          // Check if database is configured
+          if (!process.env.POSTGRES_URL) {
+            console.error("Database not configured. Please set POSTGRES_URL in .env.local");
+            return null;
+          }
+          
           const { rows } = await sql`
             SELECT * FROM users WHERE email = ${credentials.email}
           `;
@@ -55,6 +61,9 @@ export const authOptions: NextAuthOptions = {
           };
         } catch (error) {
           console.error("Auth error:", error);
+          if (error instanceof Error && error.message.includes("connect")) {
+            console.error("Database connection failed. Check your POSTGRES_URL configuration.");
+          }
           return null;
         }
       }
@@ -87,6 +96,12 @@ export const authOptions: NextAuthOptions = {
     async signIn({ user, account, profile }) {
       if (account?.provider === "email") {
         try {
+          // Check if database is configured
+          if (!process.env.POSTGRES_URL) {
+            console.error("Database not configured for email sign-in");
+            return false;
+          }
+          
           // Check if user exists
           const { rows } = await sql`
             SELECT * FROM users WHERE email = ${user.email}
@@ -103,6 +118,9 @@ export const authOptions: NextAuthOptions = {
           return true;
         } catch (error) {
           console.error("Sign in error:", error);
+          if (error instanceof Error && error.message.includes("connect")) {
+            console.error("Database connection failed during sign-in");
+          }
           return false;
         }
       }

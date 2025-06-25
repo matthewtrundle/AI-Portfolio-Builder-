@@ -312,13 +312,32 @@ Return ONLY the JSON object. No additional text or explanation.`;
   } catch (error) {
     console.error("Resume parsing error:", error);
     
+    // Provide more detailed error messages
+    let errorMessage = getSafeErrorMessage(error);
+    let statusCode = 500;
+    
+    // Check for specific error types
+    if (error instanceof Error) {
+      if (error.message.includes("OPENROUTER_API_KEY")) {
+        errorMessage = "AI service configuration error. Please check server settings.";
+        statusCode = 503;
+      } else if (error.message.includes("Failed to parse resume with AI")) {
+        errorMessage = "AI service temporarily unavailable. Please try again in a few moments.";
+        statusCode = 503;
+      } else if (error.message.includes("rate limit")) {
+        errorMessage = "Too many requests. Please wait a moment before trying again.";
+        statusCode = 429;
+      }
+    }
+    
     return NextResponse.json(
       { 
-        error: getSafeErrorMessage(error),
+        error: errorMessage,
         extractedData: getEmptyData(),
-        confidence: 0
+        confidence: 0,
+        success: false
       },
-      { status: 500, headers: getSecurityHeaders() }
+      { status: statusCode, headers: getSecurityHeaders() }
     );
   }
 }

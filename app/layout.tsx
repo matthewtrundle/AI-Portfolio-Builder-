@@ -16,6 +16,11 @@ export const metadata: Metadata = {
     description: 'Build your professional portfolio in minutes with AI',
     type: 'website',
   },
+  icons: {
+    icon: '/favicon.ico',
+    shortcut: '/favicon.ico',
+    apple: '/favicon.ico',
+  },
 }
 
 export default function RootLayout({

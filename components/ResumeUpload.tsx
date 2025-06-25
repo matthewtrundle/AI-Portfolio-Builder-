@@ -127,7 +127,8 @@ export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadPr
       clearInterval(progressInterval);
 
       if (!response.ok) {
-        throw new Error("Failed to parse resume");
+        const errorData = await response.json().catch(() => ({ error: "Failed to parse resume" }));
+        throw new Error(errorData.error || `Server error: ${response.status}`);
       }
 
       const data = await response.json();
@@ -154,8 +155,26 @@ export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadPr
     } catch (error) {
       clearInterval(progressInterval);
       setParseStatus("error");
-      setError(error instanceof Error ? error.message : "Failed to parse resume");
-      setParseProgress({ stage: "Error", progress: 0 });
+      
+      // Enhanced error message handling
+      let errorMessage = "Failed to parse resume";
+      if (error instanceof Error) {
+        errorMessage = error.message;
+        
+        // Add user-friendly messages for common errors
+        if (error.message.includes("AI service")) {
+          errorMessage = "The AI service is temporarily unavailable. Please try again in a few moments.";
+        } else if (error.message.includes("rate limit")) {
+          errorMessage = "You've made too many requests. Please wait a minute before trying again.";
+        } else if (error.message.includes("configuration")) {
+          errorMessage = "There's a server configuration issue. Please contact support if this persists.";
+        }
+      }
+      
+      setError(errorMessage);
+      setParseProgress({ stage: "Error occurred", progress: 0 });
+      
+      console.error("Resume parsing error:", error);
     }
   };
 
