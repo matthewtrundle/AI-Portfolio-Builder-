@@ -42,10 +42,6 @@ export default function PremiumLandingPage() {
   const heroY = useTransform(scrollY, [0, 1000], [0, -150]);
   const heroOpacity = useTransform(scrollY, [0, 300], [1, 0]);
   
-  // Animated counters
-  const portfolioCount = useCountUp(12458, 2500);
-  const interviewRate = useCountUp(89, 2000);
-  const offerCount = useCountUp(2534, 2500);
 
   // Live activity simulation
   const [recentActivity, setRecentActivity] = useState([
@@ -70,13 +66,6 @@ export default function PremiumLandingPage() {
     return () => clearInterval(interval);
   }, []);
 
-  // Testimonial rotation
-  useEffect(() => {
-    const interval = setInterval(() => {
-      setActiveTestimonial(prev => (prev + 1) % testimonials.length);
-    }, 5000);
-    return () => clearInterval(interval);
-  }, []);
 
   return (
     <div className="min-h-screen bg-white overflow-x-hidden">
