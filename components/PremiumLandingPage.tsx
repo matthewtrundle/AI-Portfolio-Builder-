@@ -95,12 +95,13 @@ export default function PremiumLandingPage() {
         <div className="container mx-auto px-4 py-4">
           <div className="flex items-center justify-between">
             <div className="flex items-center gap-2">
-              <div className="relative">
-                <div className="absolute inset-0 bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg blur-xl opacity-50" />
-                <div className="relative bg-gradient-to-r from-blue-600 to-purple-600 rounded-lg p-2">
-                  <Sparkles className="w-6 h-6 text-white" />
-                </div>
-              </div>
+              <Image 
+                src="/images/logo.png" 
+                alt="PortfolioAI Logo" 
+                width={40} 
+                height={40} 
+                className="object-contain"
+              />
               <span className="text-xl font-bold bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
                 PortfolioAI
               </span>
@@ -160,7 +161,7 @@ export default function PremiumLandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.2 }}
-              className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-6"
+              className="text-5xl md:text-6xl lg:text-7xl font-bold leading-tight mb-8"
             >
               <span className="bg-gradient-to-r from-gray-900 via-gray-800 to-gray-900 bg-clip-text text-transparent">
                 Your Story Deserves
@@ -175,7 +176,7 @@ export default function PremiumLandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.4 }}
-              className="text-xl md:text-2xl text-gray-600 mb-8 max-w-3xl mx-auto leading-relaxed"
+              className="text-xl md:text-2xl text-gray-600 mb-12 max-w-3xl mx-auto leading-relaxed"
             >
               Welcome to the evolution of professional storytelling. Share your projects,{" "}
               <span className="font-semibold text-gray-900">showcase your journey</span>, and connect authentically.
@@ -186,7 +187,7 @@ export default function PremiumLandingPage() {
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.8, delay: 0.6 }}
-              className="flex flex-col sm:flex-row gap-4 justify-center mb-12"
+              className="flex flex-col sm:flex-row gap-4 justify-center mb-16"
             >
               <Link
                 href="/app"
@@ -234,14 +235,16 @@ export default function PremiumLandingPage() {
       </section>
 
       {/* Hero Image Section */}
-      <section className="py-12 bg-gradient-to-b from-white to-gray-50">
+      <section className="py-20 bg-gradient-to-b from-white to-gray-50">
         <div className="container mx-auto px-4">
           <HeroImageSection />
         </div>
       </section>
 
       {/* Evolution Timeline */}
-      <EvolutionTimeline />
+      <section className="py-8">
+        <EvolutionTimeline />
+      </section>
 
       {/* Problem Agitation with Premium Cards */}
       <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
@@ -375,77 +378,6 @@ export default function PremiumLandingPage() {
         </div>
       </section>
 
-      {/* How It Works - Bento Grid Style */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4">
-          <motion.div
-            initial={{ opacity: 0 }}
-            whileInView={{ opacity: 1 }}
-            viewport={{ once: true }}
-            className="max-w-6xl mx-auto"
-          >
-            <div className="text-center mb-16">
-              <h2 className="text-4xl md:text-5xl font-bold mb-4">
-                <span className="bg-gradient-to-r from-gray-900 to-gray-700 bg-clip-text text-transparent">
-                  Your Journey Starts Here
-                </span>
-              </h2>
-              <p className="text-xl text-gray-600">
-                Transform your experience into an interactive story
-              </p>
-            </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-              {[
-                {
-                  step: "01",
-                  icon: FileText,
-                  title: "Begin With Your Story",
-                  description: "Upload your resume or share your experience. Every journey is unique and valuable.",
-                  gradient: "from-blue-500 to-cyan-500",
-                },
-                {
-                  step: "02",
-                  icon: Bot,
-                  title: "AI Amplifies Your Voice",
-                  description: "Our AI helps structure your story while keeping your authentic voice and personality.",
-                  gradient: "from-purple-500 to-pink-500",
-                },
-                {
-                  step: "03",
-                  icon: Globe,
-                  title: "Connect Meaningfully",
-                  description: "Share your portfolio and create genuine connections with teams that value your journey.",
-                  gradient: "from-orange-500 to-red-500",
-                },
-              ].map((item, index) => (
-                <motion.div
-                  key={index}
-                  initial={{ opacity: 0, y: 20 }}
-                  whileInView={{ opacity: 1, y: 0 }}
-                  viewport={{ once: true }}
-                  transition={{ delay: index * 0.2 }}
-                  className="relative group"
-                >
-                  <div className="absolute inset-0 bg-gradient-to-br from-gray-100 to-gray-50 rounded-2xl transform group-hover:scale-105 transition-transform duration-300" />
-                  <div className="relative p-8">
-                    <div className="flex items-start justify-between mb-6">
-                      <span className="text-6xl font-bold text-gray-200">
-                        {item.step}
-                      </span>
-                      <div className={`p-3 bg-gradient-to-r ${item.gradient} rounded-xl`}>
-                        <item.icon className="w-6 h-6 text-white" />
-                      </div>
-                    </div>
-                    <h3 className="text-2xl font-bold mb-3">{item.title}</h3>
-                    <p className="text-gray-600 leading-relaxed">{item.description}</p>
-                  </div>
-                </motion.div>
-              ))}
-            </div>
-          </motion.div>
-        </div>
-      </section>
 
       {/* Features with Images */}
       <section className="py-24 bg-white">
