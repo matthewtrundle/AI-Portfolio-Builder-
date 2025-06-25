@@ -218,38 +218,6 @@ export default function PremiumLandingPage() {
                   <span className="text-gray-600">Begin in minutes</span>
                 </div>
               </motion.div>
-              
-              {/* Floating urgency badge */}
-              <motion.div
-                initial={{ opacity: 0, scale: 0.8 }}
-                animate={{ opacity: 1, scale: 1 }}
-                transition={{ delay: 1.2, type: "spring" }}
-                className="mt-8 lg:mt-0 lg:absolute lg:-right-24 lg:top-20"
-              >
-                <motion.div
-                  animate={{ 
-                    y: [-5, 5, -5],
-                    rotate: [-2, 2, -2]
-                  }}
-                  transition={{ 
-                    duration: 4,
-                    repeat: Infinity,
-                    ease: "easeInOut"
-                  }}
-                  className="relative"
-                >
-                  <div className="bg-gradient-to-br from-orange-400 to-red-500 text-white px-6 py-3 rounded-2xl shadow-xl">
-                    <div className="flex items-center gap-2">
-                      <Zap className="w-5 h-5" />
-                      <div>
-                        <p className="text-xs font-medium opacity-90">Limited Time</p>
-                        <p className="text-sm font-bold">50% OFF Premium</p>
-                      </div>
-                    </div>
-                  </div>
-                  <div className="absolute -bottom-2 left-1/2 -translate-x-1/2 w-0 h-0 border-l-[8px] border-l-transparent border-r-[8px] border-r-transparent border-t-[8px] border-t-red-500" />
-                </motion.div>
-              </motion.div>
             </div>
 
             {/* Right side - Modern Resume showcase */}
@@ -259,47 +227,75 @@ export default function PremiumLandingPage() {
               transition={{ duration: 0.8, delay: 0.4 }}
               className="relative hidden lg:block"
             >
-              <div className="relative group perspective-1000">
-                {/* Multi-layered glow effect */}
-                <motion.div 
-                  className="absolute -inset-4 bg-gradient-to-r from-blue-400 via-purple-400 to-pink-400 rounded-3xl opacity-20 blur-3xl group-hover:opacity-40 transition-opacity duration-700"
+              <div className="relative">
+                {/* Animated gradient background */}
+                <motion.div
+                  className="absolute -inset-8 rounded-3xl opacity-60"
                   animate={{
-                    scale: [1, 1.05, 1],
-                    rotate: [0, 1, 0],
+                    background: [
+                      "linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #667eea 100%)",
+                      "linear-gradient(45deg, #4facfe 0%, #667eea 25%, #764ba2 50%, #f093fb 75%, #4facfe 100%)",
+                      "linear-gradient(45deg, #f093fb 0%, #4facfe 25%, #667eea 50%, #764ba2 75%, #f093fb 100%)",
+                      "linear-gradient(45deg, #764ba2 0%, #f093fb 25%, #4facfe 50%, #667eea 75%, #764ba2 100%)",
+                      "linear-gradient(45deg, #667eea 0%, #764ba2 25%, #f093fb 50%, #4facfe 75%, #667eea 100%)",
+                    ],
                   }}
                   transition={{
-                    duration: 4,
+                    duration: 10,
                     repeat: Infinity,
-                    ease: "easeInOut"
+                    ease: "linear"
+                  }}
+                  style={{
+                    filter: "blur(40px)",
+                    transform: "scale(1.2)",
                   }}
                 />
                 
-                {/* Sophisticated card container */}
-                <div className="relative transform-gpu transition-all duration-700">
-                  {/* Premium glass card effect */}
-                  <div className="relative bg-white/95 backdrop-blur-xl rounded-3xl shadow-2xl overflow-hidden border border-gray-100">
-                    {/* Subtle gradient overlay */}
-                    <div className="absolute inset-0 bg-gradient-to-br from-blue-50/30 via-transparent to-purple-50/30 pointer-events-none" />
+                {/* Modern card with vibrant border */}
+                <div className="relative group">
+                  {/* Gradient border */}
+                  <div className="absolute -inset-[2px] bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 rounded-3xl opacity-75 group-hover:opacity-100 transition-opacity duration-500" />
+                  
+                  {/* Main card */}
+                  <div className="relative bg-white rounded-3xl overflow-hidden">
+                    {/* Top accent bar */}
+                    <div className="h-2 bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500" />
                     
-                    {/* Resume content */}
-                    <div className="relative p-6">
-                      <div className="relative overflow-hidden rounded-2xl">
+                    {/* Content container */}
+                    <div className="p-8">
+                      {/* Header with colorful accents */}
+                      <div className="flex items-center justify-between mb-6">
+                        <div className="flex gap-2">
+                          <div className="w-3 h-3 rounded-full bg-red-500" />
+                          <div className="w-3 h-3 rounded-full bg-yellow-500" />
+                          <div className="w-3 h-3 rounded-full bg-green-500" />
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <div className="h-6 w-20 bg-gradient-to-r from-purple-200 to-pink-200 rounded-full" />
+                          <div className="h-6 w-16 bg-gradient-to-r from-blue-200 to-cyan-200 rounded-full" />
+                        </div>
+                      </div>
+                      
+                      {/* Resume image */}
+                      <div className="relative overflow-hidden rounded-2xl shadow-inner">
                         <Image
                           src="/images/Resume.png"
                           alt="Interactive portfolio example"
                           width={600}
                           height={800}
-                          className="w-full h-auto"
+                          className="w-full h-auto transform transition-transform duration-500 group-hover:scale-105"
                           priority
                         />
+                        
+                        {/* Colorful gradient overlay on hover */}
+                        <div className="absolute inset-0 bg-gradient-to-tr from-blue-500/10 via-purple-500/10 to-pink-500/10 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none" />
                       </div>
+                      
+                      {/* Bottom accent with gradient */}
+                      <div className="mt-6 h-1 bg-gradient-to-r from-cyan-400 via-purple-400 to-pink-400 rounded-full" />
                     </div>
-                    
-                    {/* Bottom gradient fade */}
-                    <div className="absolute bottom-0 left-0 right-0 h-24 bg-gradient-to-t from-white via-white/80 to-transparent pointer-events-none" />
                   </div>
                 </div>
-              </div>
             </motion.div>
           </div>
         </motion.div>
