@@ -71,7 +71,7 @@ const evolutionSteps = [
     icon: TypewriterIcon,
     color: "from-gray-400 to-gray-600",
     bgColor: "bg-gray-50",
-    image: "/images/typewriter-era.jpg",
+    image: "/images/timeline/biff01_Vintage_1940s_office_scene_with_typewriter_and_paper_d_de6d0460-2359-4acc-bb80-6eb692091c6e_0.png",
     details: "One page, black ink, professional formatting"
   },
   {
@@ -81,7 +81,7 @@ const evolutionSteps = [
     icon: ComputerIcon,
     color: "from-blue-400 to-blue-600",
     bgColor: "bg-blue-50",
-    image: "/images/computer-era.jpg",
+    image: "/images/timeline/biff01_1990s_office_with_CRT_computer_monitor_displaying_earl_225b3142-dcd0-4a5d-aa0e-cd994fea1f31_2.png",
     details: "PDF formats, keyword optimization begins"
   },
   {
@@ -91,7 +91,7 @@ const evolutionSteps = [
     icon: CloudIcon,
     color: "from-purple-400 to-purple-600",
     bgColor: "bg-purple-50",
-    image: "/images/online-era.jpg",
+    image: "/images/timeline/biff01_Modern_2000s_office_space_with_flat_screen_monitor_sho_f78fa388-dcd9-492c-acb0-70e60b97ff19_2.png",
     details: "Mass applications, automated screening"
   },
   {
@@ -101,7 +101,7 @@ const evolutionSteps = [
     icon: NetworkIcon,
     color: "from-green-400 to-green-600",
     bgColor: "bg-green-50",
-    image: "/images/social-era.jpg",
+    image: "/images/timeline/biff01_Contemporary_office_with_laptop_showing_professional_n_cc865510-14d5-4e46-8ffb-062687ffad5e_0.png",
     details: "Personal branding, network effects"
   },
   {
@@ -111,7 +111,7 @@ const evolutionSteps = [
     icon: PortfolioIcon,
     color: "from-orange-400 to-pink-500",
     bgColor: "bg-gradient-to-br from-orange-50 to-pink-50",
-    image: "/images/portfolio-era.jpg",
+    image: "/images/timeline/biff01_Futuristic_workspace_with_multiple_screens_showing_int_89c1c406-f071-43d9-8446-dcc6d87a6abd_1.png",
     details: "AI-powered, multimedia, personality-driven"
   }
 ];
@@ -186,14 +186,12 @@ export default function EvolutionTimeline() {
                         <div className="absolute inset-0">
                           {step.image && (
                             <div className="absolute inset-0 opacity-20 group-hover:opacity-30 transition-opacity duration-500">
-                              {/* Image placeholder - uncomment when images are added
                               <Image
                                 src={step.image}
                                 alt={`${step.title} era`}
                                 fill
                                 className="object-cover"
                               />
-                              */}
                             </div>
                           )}
                         </div>
