@@ -31,6 +31,8 @@ interface ParseProgress {
 
 export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadProps) {
   const [file, setFile] = useState<File | null>(null);
+  const [headshot, setHeadshot] = useState<File | null>(null);
+  const [headshotPreview, setHeadshotPreview] = useState<string>("");
   const [parseStatus, setParseStatus] = useState<ParseStatus>("idle");
   const [parseProgress, setParseProgress] = useState<ParseProgress>({
     stage: "",
@@ -48,6 +50,20 @@ export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadPr
     }
   }, []);
 
+  const onHeadshotDrop = useCallback((acceptedFiles: File[]) => {
+    const uploadedFile = acceptedFiles[0];
+    if (uploadedFile) {
+      setHeadshot(uploadedFile);
+      
+      // Create preview URL
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setHeadshotPreview(reader.result as string);
+      };
+      reader.readAsDataURL(uploadedFile);
+    }
+  }, []);
+
   const { getRootProps, getInputProps, isDragActive } = useDropzone({
     onDrop,
     accept: {
@@ -57,6 +73,21 @@ export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadPr
       "text/plain": [".txt"],
     },
     maxSize: 10 * 1024 * 1024, // 10MB
+    multiple: false,
+  });
+
+  const {
+    getRootProps: getHeadshotRootProps,
+    getInputProps: getHeadshotInputProps,
+    isDragActive: isHeadshotDragActive,
+  } = useDropzone({
+    onDrop: onHeadshotDrop,
+    accept: {
+      "image/jpeg": [".jpg", ".jpeg"],
+      "image/png": [".png"],
+      "image/webp": [".webp"],
+    },
+    maxSize: 5 * 1024 * 1024, // 5MB
     multiple: false,
   });
 
@@ -108,7 +139,12 @@ export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadPr
         
         // Auto-proceed after showing success
         setTimeout(() => {
-          onDataExtracted(data.extractedData);
+          const dataWithHeadshot = {
+            ...data.extractedData,
+            headshot: headshotPreview,
+            headshotFile: headshot
+          };
+          onDataExtracted(dataWithHeadshot);
         }, 1500);
       } else {
         throw new Error(data.error || "Failed to extract data");
@@ -177,6 +213,65 @@ export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadPr
                   <span>PDF, DOC, DOCX, TXT</span>
                   <span>•</span>
                   <span>Max 10MB</span>
+                </div>
+              </div>
+            </div>
+
+            {/* Headshot Upload Section */}
+            <div className="mt-8 p-6 bg-gray-50 rounded-xl">
+              <h3 className="text-lg font-semibold mb-4">Optional: Add your headshot</h3>
+              
+              <div className="flex items-start gap-6">
+                {/* Headshot Preview */}
+                {headshotPreview ? (
+                  <div className="relative">
+                    <img
+                      src={headshotPreview}
+                      alt="Headshot preview"
+                      className="w-32 h-32 rounded-full object-cover border-4 border-white shadow-lg"
+                    />
+                    <button
+                      onClick={() => {
+                        setHeadshot(null);
+                        setHeadshotPreview("");
+                      }}
+                      className="absolute -top-2 -right-2 w-8 h-8 bg-red-500 text-white rounded-full flex items-center justify-center hover:bg-red-600 transition-colors"
+                    >
+                      <XCircle className="w-5 h-5" />
+                    </button>
+                  </div>
+                ) : (
+                  <div
+                    {...getHeadshotRootProps()}
+                    className={`
+                      w-32 h-32 rounded-full border-2 border-dashed flex items-center justify-center
+                      transition-all duration-300 cursor-pointer
+                      ${isHeadshotDragActive 
+                        ? "border-blue-500 bg-blue-50" 
+                        : "border-gray-300 bg-white hover:border-blue-400 hover:bg-blue-50/50"
+                      }
+                    `}
+                  >
+                    <input {...getHeadshotInputProps()} />
+                    <div className="text-center">
+                      <Upload className="w-8 h-8 text-gray-400 mx-auto mb-1" />
+                      <p className="text-xs text-gray-600">
+                        {isHeadshotDragActive ? "Drop here" : "Add photo"}
+                      </p>
+                    </div>
+                  </div>
+                )}
+                
+                {/* Info text */}
+                <div className="flex-1">
+                  <p className="text-sm text-gray-600 mb-2">
+                    Add a professional headshot to personalize your portfolio
+                  </p>
+                  <ul className="text-xs text-gray-500 space-y-1">
+                    <li>• JPG, PNG, or WebP format</li>
+                    <li>• Max 5MB file size</li>
+                    <li>• Square images work best</li>
+                  </ul>
                 </div>
               </div>
             </div>
@@ -329,7 +424,14 @@ export default function ResumeUpload({ onDataExtracted, onSkip }: ResumeUploadPr
                     Some sections need your review. We'll pre-fill what we found and you can complete the rest.
                   </p>
                   <button
-                    onClick={() => onDataExtracted(extractedData)}
+                    onClick={() => {
+                      const dataWithHeadshot = {
+                        ...extractedData,
+                        headshot: headshotPreview,
+                        headshotFile: headshot
+                      };
+                      onDataExtracted(dataWithHeadshot);
+                    }}
                     className="px-6 py-2 bg-amber-600 text-white rounded-lg hover:bg-amber-700 flex items-center gap-2"
                   >
                     Continue to Review

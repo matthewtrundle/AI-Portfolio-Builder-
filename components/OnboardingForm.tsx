@@ -27,6 +27,7 @@ const portfolioSchema = z.object({
   location: z.string().min(2, "Location is required"),
   linkedin: z.string().url("Valid LinkedIn URL required").optional().or(z.literal("")),
   github: z.string().optional(),
+  headshot: z.string().optional(),
   
   // Professional Summary
   currentRole: z.string().min(10, "Please describe your current role"),
@@ -91,6 +92,7 @@ export default function OnboardingForm({ onSubmit, initialData }: OnboardingForm
       location: initialData?.location || "",
       linkedin: initialData?.linkedin || "",
       github: initialData?.github || "",
+      headshot: initialData?.headshot || "",
       currentRole: initialData?.currentRole || "",
       yearsExperience: initialData?.yearsExperience || "",
       keyAchievement: initialData?.keyAchievement || "",

@@ -10,6 +10,7 @@ import {
   containsSensitiveInfo,
   sanitizeInput
 } from "@/lib/security-guardrails";
+import { parsePDF, parseDOCX } from "@/lib/document-parsers";
 
 // Helper function to check file signatures
 function isValidFileSignature(buffer: ArrayBuffer, fileName: string): boolean {
@@ -116,26 +117,36 @@ export async function POST(request: NextRequest) {
       if (file.type === "text/plain") {
         resumeText = await file.text();
       } else if (file.type === "application/pdf" || file.name.toLowerCase().endsWith('.pdf')) {
-        // PDF parsing temporarily disabled for production build
-        return NextResponse.json({
-          success: false,
-          error: "PDF parsing is coming soon. Please upload a TXT file or paste your resume content directly.",
-          extractedData: getEmptyData(),
-          confidence: 0
-        }, { headers: getSecurityHeaders() });
+        // Parse PDF using wrapper function
+        try {
+          resumeText = await parsePDF(Buffer.from(buffer));
+        } catch (pdfError) {
+          console.error("PDF parsing error:", pdfError);
+          return NextResponse.json({
+            success: false,
+            error: "Failed to parse PDF. Please ensure the PDF contains selectable text (not scanned images).",
+            extractedData: getEmptyData(),
+            confidence: 0
+          }, { headers: getSecurityHeaders() });
+        }
       } else if (
         file.type === "application/msword" || 
         file.type === "application/vnd.openxmlformats-officedocument.wordprocessingml.document" ||
         file.name.toLowerCase().endsWith('.doc') ||
         file.name.toLowerCase().endsWith('.docx')
       ) {
-        // DOC/DOCX parsing temporarily disabled for production build
-        return NextResponse.json({
-          success: false,
-          error: "DOC/DOCX parsing is coming soon. Please upload a TXT file or paste your resume content directly.",
-          extractedData: getEmptyData(),
-          confidence: 0
-        }, { headers: getSecurityHeaders() });
+        // Parse DOC/DOCX using wrapper function
+        try {
+          resumeText = await parseDOCX(Buffer.from(buffer));
+        } catch (docError) {
+          console.error("DOC/DOCX parsing error:", docError);
+          return NextResponse.json({
+            success: false,
+            error: "Failed to parse DOC/DOCX file. Please try converting to PDF or TXT format.",
+            extractedData: getEmptyData(),
+            confidence: 0
+          }, { headers: getSecurityHeaders() });
+        }
       } else {
         return NextResponse.json({
           success: false,

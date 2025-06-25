@@ -828,9 +828,6 @@ export default function PremiumLandingPage() {
                 <div className="absolute inset-0 bg-gradient-to-r from-blue-100 to-purple-100 opacity-0 group-hover:opacity-100 transition-opacity duration-300" />
               </Link>
               
-              <button className="px-8 py-4 text-white border-2 border-white/30 rounded-full font-semibold hover:bg-white/10 transition-all duration-300">
-                Watch Demo (2 min)
-              </button>
             </motion.div>
             
             <motion.div
@@ -841,16 +838,8 @@ export default function PremiumLandingPage() {
               className="flex flex-wrap items-center justify-center gap-6 text-sm"
             >
               <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
-                <CheckCircle className="w-5 h-5 text-green-400" />
-                <span>Free forever plan</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
                 <Clock className="w-5 h-5 text-blue-400" />
                 <span>Setup in 5 minutes</span>
-              </div>
-              <div className="flex items-center gap-2 bg-white/10 px-4 py-2 rounded-full backdrop-blur-sm">
-                <Shield className="w-5 h-5 text-purple-400" />
-                <span>Bank-level security</span>
               </div>
             </motion.div>
           </div>
